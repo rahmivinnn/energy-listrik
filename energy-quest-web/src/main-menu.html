@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Main Menu</title>
+    <link rel="stylesheet" href="public/main-menu.css">
+    <link rel="icon" type="image/x-icon" href="public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Background Video -->
+    <div id="background-video">
+        <video autoplay muted loop>
+            <source src="public/Video/video action.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <!-- Main Menu Container -->
+    <div id="main-menu-container">
+        <!-- Header Title -->
+        <div class="header-container">
+            <img src="public/logo.png" alt="Energy Quest Logo" class="main-logo">
+            <div class="title-wrapper">
+                <h1 class="game-title-energy">ENERGY</h1>
+                <h1 class="game-title-quest">QUEST</h1>
+                <!-- Transparent button over Energy Quest text -->
+                <button class="transparent-title-btn" onclick="loadSplashScreen()" title="Klik untuk ke Splashscreen"></button>
+            </div>
+            <p class="game-subtitle">Petualangan Hemat Energi</p>
+        </div>
+
+        <!-- Top Right Options -->
+        <div class="top-options">
+            <button class="option-btn small-btn" onclick="showInstructions()">
+                <i class="fas fa-question-circle"></i>
+                <span>PETUNJUK</span>
+            </button>
+            <button class="option-btn small-btn" onclick="showCredits()">
+                <i class="fas fa-info-circle"></i>
+                <span>KREDIT</span>
+            </button>
+        </div>
+
+        <!-- Main Game Buttons -->
+        <div class="level-menu">
+            <button class="unity-btn level-btn main-game-btn" onclick="startGame()">
+                <div class="btn-glow"></div>
+                <i class="fas fa-play btn-icon"></i>
+                <div class="btn-content">
+                    <span class="btn-title">Mulai Permainan</span>
+                    <span class="btn-desc">Memulai permainan baru dari Level 1 (Ruang Tamu – Dasar Listrik)</span>
+                </div>
+            </button>
+            
+            <button class="unity-btn level-btn quiz-btn" onclick="continueGame()">
+                <div class="btn-glow"></div>
+                <i class="fas fa-redo-alt btn-icon"></i>
+                <div class="btn-content">
+                    <span class="btn-title">Lanjutkan</span>
+                    <span class="btn-desc">Melanjutkan permainan dari penyimpanan terakhir</span>
+                </div>
+            </button>
+            
+            <button class="unity-btn level-btn energy-game-btn" onclick="showSettings()">
+                <div class="btn-glow"></div>
+                <i class="fas fa-cog btn-icon"></i>
+                <div class="btn-content">
+                    <span class="btn-title">Pengaturan</span>
+                    <span class="btn-desc">Mengatur preferensi suara, musik, dan tampilan teks</span>
+                </div>
+            </button>
+            
+            <button class="unity-btn level-btn experiments-btn" onclick="showAbout()">
+                <div class="btn-glow"></div>
+                <i class="fas fa-info-circle btn-icon"></i>
+                <div class="btn-content">
+                    <span class="btn-title">Tentang</span>
+                    <span class="btn-desc">Menampilkan informasi singkat mengenai game, tujuan edukasi, serta tim pengembang</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('instructions-modal')">&times;</span>
+            <h2>Petunjuk Bermain</h2>
+            <div class="instructions-content">
+                <div class="instruction-item">
+                    <h3>🧩 Puzzle</h3>
+                    <p>Susun kabel listrik dengan benar untuk menghubungkan sumber listrik ke perangkat.</p>
+                </div>
+                <div class="instruction-item">
+                    <h3>🏠 Level 1 - Ruang Tamu</h3>
+                    <p>Kelola penggunaan energi di ruang tamu dengan mengatur perangkat elektronik.</p>
+                </div>
+                <div class="instruction-item">
+                    <h3>🍳 Level 2 - Dapur</h3>
+                    <p>Optimalkan efisiensi energi di dapur dengan mengatur peralatan masak.</p>
+                </div>
+                <div class="instruction-item">
+                    <h3>🔬 Level 3 - Lab</h3>
+                    <p>Simulasikan penggunaan energi dan hitung biaya listrik bulanan.</p>
+                </div>
+                <div class="instruction-item">
+                    <h3>📊 Level 4 - Evaluasi</h3>
+                    <p>Uji pengetahuan Anda tentang hemat energi melalui kuis interaktif.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credits Modal -->
+    <div id="credits-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('credits-modal')">&times;</span>
+            <h2>Tim Pengembang</h2>
+            <div class="credits-content">
+                <div class="credit-item">
+                    <h3>Energy Quest</h3>
+                    <p>Game Edukasi Hemat Energi</p>
+                </div>
+
+                <div class="credit-item">
+                    <h3>Tujuan</h3>
+                    <p>Meningkatkan kesadaran tentang pentingnya menghemat energi listrik</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio -->
+    <audio id="menu-audio" loop>
+        <source src="public/menu-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="scripts/scene-manager.js"></script>
+    <script src="scripts/main-menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 5 - Level 4: 地下室最终评估</title>
+    <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/scene5-level4.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Scene 5 Level 4 Container -->
+    <div id="scene5-level4-container" class="scene-container hidden">
+        <!-- Background -->
+        <div class="scene-background">
+            <img src="public/images/basement-background.jpg" alt="地下室背景" class="background-image">
+            <div class="background-overlay"></div>
+        </div>
+
+        <!-- Puzzle Game Container (Similar to main puzzle) -->
+        <div id="final-puzzle-container" class="puzzle-game-container">
+            <!-- Header -->
+            <div id="final-puzzle-header" class="puzzle-header">
+                <div id="final-puzzle-title" class="puzzle-title">
+                    <h1>能源知识最终评估</h1>
+                    <p>运用你学到的知识，完成最终挑战</p>
+                </div>
+                
+                <div id="final-timer-display" class="timer-display">
+                    <span id="final-timer-text">剩余时间</span>
+                    <span id="final-timer-value">10:00</span>
+                </div>
+                
+                <div id="final-motivational-text" class="motivational-text">
+                    证明你已经掌握了能源管理的精髓！
+                </div>
+            </div>
+
+            <!-- Left Panel -->
+            <div class="hud-left-panel">
+                <div class="level-info">
+                    <h2>Level 4: 地下室</h2>
+                    <p>最终评估挑战</p>
+                </div>
+                
+                <div class="progress-panel">
+                    <h3>完成进度</h3>
+                    <div class="progress-bar">
+                        <div id="quiz-progress" class="progress-fill">0%</div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="current-question">1</span> / <span id="total-questions">10</span>
+                    </div>
+                </div>
+                
+                <div class="score-panel">
+                    <h3>当前得分</h3>
+                    <div class="score-display">
+                        <span id="current-score">0</span> / <span id="max-score">100</span>
+                    </div>
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span>正确答案:</span>
+                            <span id="correct-count">0</span>
+                        </div>
+                        <div class="score-item">
+                            <span>错误答案:</span>
+                            <span id="wrong-count">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="energy-keys-panel">
+                    <h3>收集的钥匙</h3>
+                    <div id="collected-keys" class="energy-keys">
+                        <!-- 动态添加能量钥匙 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="hud-right-panel">
+                <div class="hint-panel">
+                    <h3>提示系统</h3>
+                    <div id="hint-display" class="hint-display">
+                        <p id="hint-text">仔细阅读每个问题，运用你在前面关卡学到的知识。</p>
+                    </div>
+                    <div class="hint-controls">
+                        <button id="hint-btn" class="hint-btn" disabled>
+                            <span class="hint-icon">💡</span>
+                            <span>获取提示</span>
+                            <span id="hint-count">(3)</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="knowledge-panel">
+                    <h3>知识回顾</h3>
+                    <div class="knowledge-items">
+                        <div class="knowledge-item" data-topic="circuit">
+                            <span class="knowledge-icon">⚡</span>
+                            <span>电路基础</span>
+                        </div>
+                        <div class="knowledge-item" data-topic="efficiency">
+                            <span class="knowledge-icon">🌱</span>
+                            <span>能效管理</span>
+                        </div>
+                        <div class="knowledge-item" data-topic="calculation">
+                            <span class="knowledge-icon">🧮</span>
+                            <span>电费计算</span>
+                        </div>
+                        <div class="knowledge-item" data-topic="conservation">
+                            <span class="knowledge-icon">💚</span>
+                            <span>节能技巧</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Quiz Area -->
+            <div id="final-quiz-area" class="quiz-area">
+                <!-- Question Display -->
+                <div id="question-container" class="question-container">
+                    <div class="question-header">
+                        <span class="question-number">问题 <span id="question-num">1</span></span>
+                        <span class="question-category" id="question-category">电路基础</span>
+                    </div>
+                    
+                    <div class="question-content">
+                        <h3 id="question-text" class="question-text">
+                            在一个简单的电路中，电流的流动需要什么条件？
+                        </h3>
+                        
+                        <div id="question-image" class="question-image hidden">
+                            <img id="question-img" src="" alt="问题图片">
+                        </div>
+                    </div>
+                    
+                    <div id="answer-options" class="answer-options">
+                        <!-- 动态生成答案选项 -->
+                    </div>
+                    
+                    <div class="question-controls">
+                        <button id="submit-answer" class="submit-btn" disabled>
+                            <span class="submit-icon">✓</span>
+                            <span>提交答案</span>
+                        </button>
+                        
+                        <button id="skip-question" class="skip-btn">
+                            <span class="skip-icon">⏭</span>
+                            <span>跳过问题</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Answer Feedback -->
+                <div id="answer-feedback" class="answer-feedback hidden">
+                    <div class="feedback-content">
+                        <div id="feedback-result" class="feedback-result">
+                            <span id="feedback-icon" class="feedback-icon">✓</span>
+                            <span id="feedback-title" class="feedback-title">回答正确！</span>
+                        </div>
+                        
+                        <div id="feedback-explanation" class="feedback-explanation">
+                            <p id="explanation-text">很好！电流需要一个完整的闭合回路才能流动。</p>
+                        </div>
+                        
+                        <div class="feedback-controls">
+                            <button id="next-question" class="next-btn">
+                                <span class="next-icon">→</span>
+                                <span>下一题</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Review Popup -->
+        <div id="knowledge-popup" class="knowledge-popup hidden">
+            <div class="popup-content">
+                <h3 id="knowledge-title">电路基础知识</h3>
+                <div id="knowledge-content" class="knowledge-content">
+                    <p>电路是电流流动的路径。基本电路包含：</p>
+                    <ul>
+                        <li>电源（如电池）</li>
+                        <li>导线（连接各部件）</li>
+                        <li>负载（如灯泡）</li>
+                        <li>开关（控制电流）</li>
+                    </ul>
+                    <p>电流只能在闭合回路中流动。</p>
+                </div>
+                <button id="knowledge-close" class="knowledge-close">关闭</button>
+            </div>
+        </div>
+
+        <!-- Final Results -->
+        <div id="final-results" class="final-results hidden">
+            <div class="results-content">
+                <div class="results-header">
+                    <h2 id="results-title">评估完成！</h2>
+                    <div class="final-score">
+                        <span class="score-label">最终得分</span>
+                        <span id="final-score-value" class="score-value">85</span>
+                        <span class="score-unit">/100</span>
+                    </div>
+                </div>
+                
+                <div class="results-breakdown">
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">正确率:</span>
+                        <span id="accuracy-rate" class="breakdown-value">85%</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">完成时间:</span>
+                        <span id="completion-time" class="breakdown-value">8:32</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span class="breakdown-label">使用提示:</span>
+                        <span id="hints-used" class="breakdown-value">1次</span>
+                    </div>
+                </div>
+                
+                <div class="performance-rating">
+                    <h3>表现评级</h3>
+                    <div id="rating-display" class="rating-display">
+                        <div class="rating-stars">
+                            <span class="star active">★</span>
+                            <span class="star active">★</span>
+                            <span class="star active">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <div id="rating-text" class="rating-text">良好掌握</div>
+                    </div>
+                </div>
+                
+                <div class="achievement-unlock">
+                    <h3>解锁成就</h3>
+                    <div class="achievement-item">
+                        <img src="public/images/master_key.png" alt="能源大师钥匙" class="achievement-image">
+                        <div class="achievement-info">
+                            <h4>能源管理大师</h4>
+                            <p>成功完成所有能源知识挑战</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="final-message">
+                    <h3>恭喜你！</h3>
+                    <p id="final-message-text">
+                        你已经成功掌握了能源管理的核心知识。从电路基础到能效优化，从电费计算到节能技巧，你都表现出色。
+                        现在你可以在日常生活中应用这些知识，成为真正的能源管理专家！
+                    </p>
+                </div>
+                
+                <div class="final-controls">
+                    <button id="restart-quiz" class="control-btn secondary">
+                        <span class="btn-icon">🔄</span>
+                        <span>重新挑战</span>
+                    </button>
+                    
+                    <button id="complete-game" class="control-btn primary">
+                        <span class="btn-icon">🏆</span>
+                        <span>完成游戏</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hint Usage Popup -->
+        <div id="hint-popup" class="hint-popup hidden">
+            <div class="popup-content">
+                <h3>提示信息</h3>
+                <div id="hint-popup-content" class="hint-popup-content">
+                    <p>这个问题考查的是电路的基本原理。回想一下在客厅关卡中学到的知识。</p>
+                </div>
+                <div class="hint-controls">
+                    <span class="hint-cost">使用提示将扣除5分</span>
+                    <div class="hint-buttons">
+                        <button id="use-hint" class="use-hint-btn">使用提示</button>
+                        <button id="cancel-hint" class="cancel-hint-btn">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="quiz-loading" class="quiz-loading hidden">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h3>正在加载题目...</h3>
+                <p>请稍候，系统正在准备你的专属挑战</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="sfx-correct" preload="auto">
+        <source src="public/audio/sfx_correct.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-wrong" preload="auto">
+        <source src="public/audio/sfx_wrong.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-complete" preload="auto">
+        <source src="public/audio/sfx_complete.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-tick" preload="auto">
+        <source src="public/audio/sfx_tick.wav" type="audio/wav">
+    </audio>
+    <audio id="ambient-basement" preload="auto" loop>
+        <source src="public/audio/ambient_basement.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="final-victory" preload="auto">
+        <source src="public/audio/final_victory.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="scripts/scene5-level4.js"></script>
+</body>
+</html>

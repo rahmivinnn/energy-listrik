@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 4 - Level 3: 实验室电费模拟</title>
+    <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/scene4-level3.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Scene 4 Level 3 Container -->
+    <div id="scene4-level3-container" class="scene-container hidden">
+        <!-- Background -->
+        <div class="scene-background">
+            <img src="public/images/lab-background.jpg" alt="实验室背景" class="background-image">
+            <div class="background-overlay"></div>
+        </div>
+
+        <!-- HUD Interface -->
+        <div class="hud-interface">
+            <!-- Left Panel - Device Control -->
+            <div class="hud-left-panel">
+                <div class="level-info">
+                    <h2>Level 3: 实验室</h2>
+                    <p>电费模拟挑战</p>
+                </div>
+                
+                <div class="objectives-panel">
+                    <h3>目标</h3>
+                    <ul class="objectives-list">
+                        <li id="obj-bill-limit" class="objective">
+                            <span class="obj-status">⏳</span>
+                            月电费 ≤ Rp300,000
+                        </li>
+                        <li id="obj-efficiency" class="objective">
+                            <span class="obj-status">⏳</span>
+                            优化设备使用时间
+                        </li>
+                        <li id="obj-calculation" class="objective">
+                            <span class="obj-status">⏳</span>
+                            理解电费计算公式
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="inventory-panel">
+                    <h3>能量钥匙</h3>
+                    <div id="energy-keys-container" class="energy-keys">
+                        <!-- 动态添加能量钥匙 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Bill Calculator -->
+            <div class="hud-right-panel">
+                <div class="bill-calculator">
+                    <h3>月电费计算器</h3>
+                    
+                    <div class="tariff-info">
+                        <span class="tariff-label">电费单价:</span>
+                        <span class="tariff-value">Rp1,467/kWh</span>
+                        <span class="tariff-note">(示例价格)</span>
+                    </div>
+                    
+                    <div class="formula-display">
+                        <h4>计算公式</h4>
+                        <div class="formula">
+                            <div class="formula-line">能耗(kWh) = (功率W × 时间h) ÷ 1000</div>
+                            <div class="formula-line">电费(Rp) = 总能耗kWh × 单价Rp/kWh</div>
+                        </div>
+                    </div>
+                    
+                    <div class="total-consumption">
+                        <h4>总能耗</h4>
+                        <div class="consumption-value">
+                            <span id="total-kwh">0</span> kWh/月
+                        </div>
+                    </div>
+                    
+                    <div class="monthly-bill">
+                        <h4>预估月电费</h4>
+                        <div class="bill-value" id="monthly-bill-amount">
+                            Rp 0
+                        </div>
+                        <div class="bill-status" id="bill-status">
+                            <span class="status-icon">⏳</span>
+                            <span class="status-text">调整设备使用时间</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-area">
+            <!-- Lab Desktop Interface -->
+            <div class="lab-desktop">
+                <div class="desktop-header">
+                    <h2>家用电器能耗管理系统</h2>
+                    <div class="system-status">
+                        <span class="status-indicator active"></span>
+                        <span>系统运行中</span>
+                    </div>
+                </div>
+                
+                <!-- Device Control Panel -->
+                <div class="device-control-panel">
+                    <h3>设备运行时间设置</h3>
+                    
+                    <!-- Device List -->
+                    <div class="device-list">
+                        <!-- 灯具 -->
+                        <div class="device-item" data-device="lamp">
+                            <div class="device-info">
+                                <div class="device-icon">💡</div>
+                                <div class="device-details">
+                                    <h4>LED灯具</h4>
+                                    <span class="device-power">15W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>每日使用时间:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="lamp-slider" class="time-slider" 
+                                           min="0" max="24" value="6" step="0.5" data-device="lamp">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="lamp-time">6.0</span>小时/天
+                                </div>
+                                <div class="energy-display">
+                                    能耗: <span id="lamp-energy">2.7</span> kWh/月
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 空调 -->
+                        <div class="device-item" data-device="ac">
+                            <div class="device-info">
+                                <div class="device-icon">❄️</div>
+                                <div class="device-details">
+                                    <h4>小型空调</h4>
+                                    <span class="device-power">1000W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>每日使用时间:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="ac-slider" class="time-slider" 
+                                           min="0" max="24" value="8" step="0.5" data-device="ac">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="ac-time">8.0</span>小时/天
+                                </div>
+                                <div class="energy-display">
+                                    能耗: <span id="ac-energy">240.0</span> kWh/月
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 电视 -->
+                        <div class="device-item" data-device="tv">
+                            <div class="device-info">
+                                <div class="device-icon">📺</div>
+                                <div class="device-details">
+                                    <h4>液晶电视</h4>
+                                    <span class="device-power">120W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>每日使用时间:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="tv-slider" class="time-slider" 
+                                           min="0" max="24" value="4" step="0.5" data-device="tv">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="tv-time">4.0</span>小时/天
+                                </div>
+                                <div class="energy-display">
+                                    能耗: <span id="tv-energy">14.4</span> kWh/月
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 冰箱 -->
+                        <div class="device-item" data-device="fridge">
+                            <div class="device-info">
+                                <div class="device-icon">🧊</div>
+                                <div class="device-details">
+                                    <h4>冰箱</h4>
+                                    <span class="device-power">150W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>每日使用时间:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="fridge-slider" class="time-slider" 
+                                           min="20" max="24" value="24" step="0.5" data-device="fridge">
+                                    <div class="slider-labels">
+                                        <span>20h</span>
+                                        <span>24h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="fridge-time">24.0</span>小时/天
+                                </div>
+                                <div class="energy-display">
+                                    能耗: <span id="fridge-energy">108.0</span> kWh/月
+                                </div>
+                                <div class="device-note">* 冰箱需要持续运行</div>
+                            </div>
+                        </div>
+
+                        <!-- 电饭煲 -->
+                        <div class="device-item" data-device="rice-cooker">
+                            <div class="device-info">
+                                <div class="device-icon">🍚</div>
+                                <div class="device-details">
+                                    <h4>电饭煲</h4>
+                                    <span class="device-power">300W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>每日使用时间:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="rice-cooker-slider" class="time-slider" 
+                                           min="0" max="6" value="1" step="0.25" data-device="rice-cooker">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>6h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="rice-cooker-time">1.0</span>小时/天
+                                </div>
+                                <div class="energy-display">
+                                    能耗: <span id="rice-cooker-energy">9.0</span> kWh/月
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 电脑 -->
+                        <div class="device-item" data-device="computer">
+                            <div class="device-info">
+                                <div class="device-icon">💻</div>
+                                <div class="device-details">
+                                    <h4>台式电脑</h4>
+                                    <span class="device-power">150W</span>
+                                </div>
+                            </div>
+                            <div class="device-controls">
+                                <label>每日使用时间:</label>
+                                <div class="slider-container">
+                                    <input type="range" id="computer-slider" class="time-slider" 
+                                           min="0" max="16" value="6" step="0.5" data-device="computer">
+                                    <div class="slider-labels">
+                                        <span>0h</span>
+                                        <span>16h</span>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="computer-time">6.0</span>小时/天
+                                </div>
+                                <div class="energy-display">
+                                    能耗: <span id="computer-energy">27.0</span> kWh/月
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preset Buttons -->
+                <div class="preset-panel">
+                    <h3>预设方案</h3>
+                    <div class="preset-buttons">
+                        <button class="preset-btn" data-preset="saving">
+                            <span class="preset-icon">🌱</span>
+                            <span class="preset-name">节能模式</span>
+                            <span class="preset-desc">最低能耗配置</span>
+                        </button>
+                        <button class="preset-btn" data-preset="normal">
+                            <span class="preset-icon">🏠</span>
+                            <span class="preset-name">标准模式</span>
+                            <span class="preset-desc">日常使用配置</span>
+                        </button>
+                        <button class="preset-btn" data-preset="comfort">
+                            <span class="preset-icon">✨</span>
+                            <span class="preset-name">舒适模式</span>
+                            <span class="preset-desc">高舒适度配置</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Energy Breakdown Chart -->
+                <div class="energy-breakdown">
+                    <h3>能耗分布</h3>
+                    <div class="chart-container">
+                        <canvas id="energy-chart" width="300" height="200"></canvas>
+                    </div>
+                    <div class="chart-legend" id="chart-legend">
+                        <!-- 动态生成图例 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Detail Popup -->
+        <div id="device-detail-popup" class="device-detail-popup hidden">
+            <div class="popup-content">
+                <h3 id="detail-device-name">设备详情</h3>
+                <div class="detail-info">
+                    <div class="detail-row">
+                        <span class="detail-label">额定功率:</span>
+                        <span id="detail-power" class="detail-value">150W</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">每日使用:</span>
+                        <span id="detail-hours" class="detail-value">6小时</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">月能耗:</span>
+                        <span id="detail-monthly" class="detail-value">27 kWh</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">月电费:</span>
+                        <span id="detail-cost" class="detail-value">Rp 39,609</span>
+                    </div>
+                </div>
+                <div class="calculation-steps">
+                    <h4>计算步骤</h4>
+                    <div id="calculation-detail" class="calculation-detail">
+                        <!-- 动态生成计算步骤 -->
+                    </div>
+                </div>
+                <button id="detail-close" class="detail-close">关闭</button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-message hidden">
+            <div class="success-content">
+                <h2 id="success-title">电费控制成功！</h2>
+                <p id="success-text">你成功将月电费控制在预算范围内，获得了能源管理的重要知识。</p>
+                <div class="blueprint-reward">
+                    <img src="public/images/blueprint_secret_device.png" alt="神秘设备蓝图" class="blueprint-image">
+                    <p>获得神秘设备蓝图！</p>
+                </div>
+                <button id="success-continue" class="success-btn">继续探索</button>
+            </div>
+        </div>
+
+        <!-- Educational Popup -->
+        <div id="educational-popup" class="educational-popup hidden">
+            <div class="edu-content">
+                <h3 id="edu-title">电费计算知识</h3>
+                <p id="edu-content">了解电费计算有助于合理控制家庭用电成本</p>
+                <div id="edu-detail" class="edu-detail">
+                    电费计算的基本原理是：电器的功率(瓦特)乘以使用时间(小时)得到能耗(瓦时)，再除以1000转换为千瓦时(kWh)。最后乘以电费单价就是实际费用。了解这个公式可以帮助我们：1)选择节能电器；2)合理安排用电时间；3)识别高耗电设备；4)制定节能计划。
+                </div>
+                <div class="edu-actions">
+                    <button id="edu-expand-btn" class="edu-expand">了解更多</button>
+                    <button id="edu-close" class="edu-close">关闭</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hint Bubble -->
+        <div id="hint-bubble" class="hint-bubble hidden">
+            <div class="hint-content">
+                <p id="hint-text">调整设备使用时间，将月电费控制在Rp300,000以内</p>
+                <button id="hint-close" class="hint-close">×</button>
+            </div>
+        </div>
+
+        <!-- Warning Message -->
+        <div id="warning-message" class="warning-message hidden">
+            <div class="warning-content">
+                <h4>⚠️ 电费超标</h4>
+                <p id="warning-text">当前配置的月电费超过预算，请调整设备使用时间</p>
+                <div class="warning-suggestions">
+                    <p>建议：</p>
+                    <ul id="warning-suggestions-list">
+                        <!-- 动态生成建议 -->
+                    </ul>
+                </div>
+                <button id="warning-close" class="warning-close">知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="sfx-ding" preload="auto">
+        <source src="public/audio/sfx_ding.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-buzz" preload="auto">
+        <source src="public/audio/sfx_buzz.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-click" preload="auto">
+        <source src="public/audio/sfx_click.wav" type="audio/wav">
+    </audio>
+    <audio id="ambient-lab" preload="auto" loop>
+        <source src="public/audio/ambient_lab.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="scripts/scene4-level3.js"></script>
+</body>
+</html>

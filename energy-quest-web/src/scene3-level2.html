@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 3 - Level 2: 厨房能效管理</title>
+    <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/scene3-level2.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Scene 3 Level 2 Container -->
+    <div id="scene3-level2-container" class="scene-container hidden">
+        <!-- Background -->
+        <div class="scene-background">
+            <img src="public/images/kitchen-background.jpg" alt="厨房背景" class="background-image">
+            <div class="background-overlay"></div>
+        </div>
+
+        <!-- HUD Interface -->
+        <div class="hud-interface">
+            <!-- Left Panel -->
+            <div class="hud-left-panel">
+                <div class="level-info">
+                    <h2>Level 2: 厨房</h2>
+                    <p>能效管理挑战</p>
+                </div>
+                
+                <div class="objectives-panel">
+                    <h3>目标</h3>
+                    <ul class="objectives-list">
+                        <li id="obj-power-meter" class="objective">
+                            <span class="obj-status">⏳</span>
+                            保持功率表在绿色区域
+                        </li>
+                        <li id="obj-natural-light" class="objective">
+                            <span class="obj-status">⏳</span>
+                            利用自然光源
+                        </li>
+                        <li id="obj-efficiency" class="objective">
+                            <span class="obj-status">⏳</span>
+                            达到能效目标
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="inventory-panel">
+                    <h3>能量钥匙</h3>
+                    <div id="energy-keys-container" class="energy-keys">
+                        <!-- 动态添加能量钥匙 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Power Meter -->
+            <div class="hud-right-panel">
+                <div class="power-meter-container">
+                    <h3>功率表</h3>
+                    <div class="power-meter">
+                        <div class="meter-scale">
+                            <div class="scale-mark" data-value="0">0</div>
+                            <div class="scale-mark" data-value="20">20</div>
+                            <div class="scale-mark" data-value="40">40</div>
+                            <div class="scale-mark" data-value="60">60</div>
+                            <div class="scale-mark" data-value="80">80</div>
+                            <div class="scale-mark" data-value="100">100</div>
+                        </div>
+                        <div class="meter-bar">
+                            <div id="power-level" class="power-level" data-level="0"></div>
+                        </div>
+                        <div class="meter-zones">
+                            <div class="zone green-zone" data-range="0-60">绿色区域 (0-60)</div>
+                            <div class="zone yellow-zone" data-range="61-80">黄色区域 (61-80)</div>
+                            <div class="zone red-zone" data-range="81-100">红色区域 (81-100)</div>
+                        </div>
+                    </div>
+                    <div class="power-value">
+                        <span id="current-power">0</span> / 100 W
+                    </div>
+                </div>
+
+                <div class="efficiency-score">
+                    <h4>能效得分</h4>
+                    <div id="efficiency-points" class="score-display">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-area">
+            <!-- Kitchen Layout -->
+            <div class="kitchen-layout">
+                <!-- Window -->
+                <div id="window-obj" class="interactive-object window-object" data-device="window">
+                    <div class="window-frame">
+                        <div id="window-panels" class="window-panels closed">
+                            <div class="window-panel left-panel"></div>
+                            <div class="window-panel right-panel"></div>
+                        </div>
+                        <div class="window-light-effect"></div>
+                    </div>
+                    <div class="object-label">窗户</div>
+                </div>
+
+                <!-- Main Light -->
+                <div id="main-light-obj" class="interactive-object light-object" data-device="main-light">
+                    <div class="light-fixture">
+                        <div class="light-bulb"></div>
+                        <div class="light-glow"></div>
+                    </div>
+                    <div class="object-label">主灯</div>
+                </div>
+
+                <!-- Refrigerator -->
+                <div id="fridge-obj" class="interactive-object fridge-object" data-device="fridge">
+                    <div class="fridge-body">
+                        <div id="fridge-door" class="fridge-door closed">
+                            <div class="door-handle"></div>
+                            <div class="door-seal"></div>
+                        </div>
+                        <div class="fridge-interior">
+                            <div class="fridge-light"></div>
+                            <div class="fridge-shelves"></div>
+                        </div>
+                    </div>
+                    <div class="object-label">冰箱</div>
+                </div>
+
+                <!-- Rice Cooker -->
+                <div id="rice-cooker-obj" class="interactive-object rice-cooker-object" data-device="rice-cooker">
+                    <div class="rice-cooker-body">
+                        <div class="cooker-lid"></div>
+                        <div class="cooker-display">
+                            <span id="cooker-mode">普通</span>
+                        </div>
+                        <div class="cooker-buttons">
+                            <button class="mode-btn" data-mode="normal">普通</button>
+                            <button class="mode-btn" data-mode="eco">节能</button>
+                        </div>
+                    </div>
+                    <div class="object-label">电饭煲</div>
+                </div>
+
+                <!-- Fan -->
+                <div id="fan-obj" class="interactive-object fan-object" data-device="fan">
+                    <div class="fan-base">
+                        <div id="fan-blades" class="fan-blades">
+                            <div class="blade"></div>
+                            <div class="blade"></div>
+                            <div class="blade"></div>
+                        </div>
+                        <div class="fan-motor"></div>
+                    </div>
+                    <div class="object-label">风扇</div>
+                </div>
+
+                <!-- Iron -->
+                <div id="iron-obj" class="interactive-object iron-object" data-device="iron">
+                    <div class="iron-body">
+                        <div class="iron-plate"></div>
+                        <div class="iron-handle"></div>
+                        <div class="iron-indicator"></div>
+                    </div>
+                    <div class="object-label">熨斗</div>
+                </div>
+
+                <!-- Kitchen Energy Guide Character -->
+                <div id="kitchen-guide" class="kitchen-energy-guide">
+                    <svg width="140" height="180" viewBox="0 0 140 180" class="guide-svg">
+                        <!-- Chef Hat -->
+                        <ellipse cx="70" cy="25" rx="30" ry="15" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2" class="chef-hat-base"/>
+                        <ellipse cx="70" cy="20" rx="25" ry="20" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2" class="chef-hat-top"/>
+                        
+                        <!-- Head -->
+                        <circle cx="70" cy="55" r="22" fill="#FFE4B5" stroke="#D4A574" stroke-width="2" class="guide-head"/>
+                        
+                        <!-- Eyes -->
+                        <circle cx="64" cy="50" r="3" fill="#333" class="guide-eye-left"/>
+                        <circle cx="76" cy="50" r="3" fill="#333" class="guide-eye-right"/>
+                        
+                        <!-- Smile -->
+                        <path d="M 60 60 Q 70 68 80 60" stroke="#333" stroke-width="2" fill="none" class="guide-mouth"/>
+                        
+                        <!-- Body (Chef Apron) -->
+                        <rect x="45" y="75" width="50" height="70" rx="10" fill="#4CAF50" stroke="#388E3C" stroke-width="2" class="guide-body"/>
+                        
+                        <!-- Apron -->
+                        <rect x="50" y="80" width="40" height="60" rx="5" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" class="guide-apron"/>
+                        
+                        <!-- Energy Symbol on Apron -->
+                        <circle cx="70" cy="110" r="8" fill="#FFD700" stroke="#FFA000" stroke-width="1" class="energy-badge"/>
+                        <text x="70" y="115" text-anchor="middle" font-size="12" fill="#333">⚡</text>
+                        
+                        <!-- Arms -->
+                        <line x1="45" y1="90" x2="30" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round" class="guide-arm-left"/>
+                        <line x1="95" y1="90" x2="110" y2="120" stroke="#FFE4B5" stroke-width="10" stroke-linecap="round" class="guide-arm-right"/>
+                        
+                        <!-- Hands with Kitchen Tools -->
+                        <circle cx="25" cy="125" r="6" fill="#FFE4B5" class="guide-hand-left"/>
+                        <circle cx="115" cy="125" r="6" fill="#FFE4B5" class="guide-hand-right"/>
+                        
+                        <!-- Kitchen Utensil (Spatula) -->
+                        <line x1="20" y1="130" x2="15" y2="140" stroke="#8B4513" stroke-width="3" class="spatula-handle"/>
+                        <ellipse cx="13" cy="142" rx="4" ry="2" fill="#C0C0C0" class="spatula-head"/>
+                        
+                        <!-- Energy Meter (in other hand) -->
+                        <rect x="110" y="130" width="8" height="12" rx="2" fill="#333" class="meter-body"/>
+                        <rect x="111" y="132" width="6" height="8" fill="#00FF00" class="meter-display"/>
+                        
+                        <!-- Legs -->
+                        <line x1="60" y1="145" x2="55" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round" class="guide-leg-left"/>
+                        <line x1="80" y1="145" x2="85" y2="170" stroke="#4CAF50" stroke-width="12" stroke-linecap="round" class="guide-leg-right"/>
+                        
+                        <!-- Shoes -->
+                        <ellipse cx="52" cy="172" rx="8" ry="4" fill="#333" class="guide-shoe-left"/>
+                        <ellipse cx="88" cy="172" rx="8" ry="4" fill="#333" class="guide-shoe-right"/>
+                    </svg>
+                    
+                    <div class="guide-speech-bubble hidden" id="guide-speech">
+                        <div class="speech-content">
+                            <p id="guide-speech-text">Halo! Saya Chef Eco, ahli hemat energi dapur!</p>
+                        </div>
+                        <div class="speech-arrow"></div>
+                    </div>
+                </div>
+                
+                <!-- Characters -->
+                <div class="character character-1">
+                    <img src="public/images/character1.png" alt="角色1">
+                </div>
+                <div class="character character-2">
+                    <img src="public/images/character2.png" alt="角色2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Status Panel -->
+        <div id="device-status-panel" class="device-status-panel">
+            <h3>设备状态</h3>
+            <div class="device-list">
+                <div class="device-item" data-device="window">
+                    <span class="device-name">窗户</span>
+                    <span class="device-status">关闭</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="main-light">
+                    <span class="device-name">主灯</span>
+                    <span class="device-status">关闭</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="fridge">
+                    <span class="device-name">冰箱</span>
+                    <span class="device-status">运行</span>
+                    <span class="device-power">150W</span>
+                </div>
+                <div class="device-item" data-device="rice-cooker">
+                    <span class="device-name">电饭煲</span>
+                    <span class="device-status">关闭</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="fan">
+                    <span class="device-name">风扇</span>
+                    <span class="device-status">关闭</span>
+                    <span class="device-power">0W</span>
+                </div>
+                <div class="device-item" data-device="iron">
+                    <span class="device-name">熨斗</span>
+                    <span class="device-status">关闭</span>
+                    <span class="device-power">0W</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hint Bubble -->
+        <div id="hint-bubble" class="hint-bubble hidden">
+            <div class="hint-content">
+                <p id="hint-text">点击窗户来利用自然光</p>
+                <button id="hint-close" class="hint-close">×</button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="success-message" class="success-message hidden">
+            <div class="success-content">
+                <h2 id="success-title">能效目标达成！</h2>
+                <p id="success-text">你成功管理了厨房的能源使用，保持了高效率运行。</p>
+                <button id="success-continue" class="success-btn">继续</button>
+            </div>
+        </div>
+
+        <!-- Educational Popup -->
+        <div id="educational-popup" class="educational-popup hidden">
+            <div class="edu-content">
+                <h3 id="edu-title">能效知识</h3>
+                <p id="edu-content">利用自然光可以显著降低照明能耗</p>
+                <div id="edu-detail" class="edu-detail">
+                    自然光不仅免费，还能提供更好的照明质量。合理利用窗户和天窗，可以在白天减少人工照明的使用，从而节约电能。同时，自然光对人体健康也有积极作用。
+                </div>
+                <div class="edu-actions">
+                    <button id="edu-expand-btn" class="edu-expand">了解更多</button>
+                    <button id="edu-close" class="edu-close">关闭</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fridge Timer Warning -->
+        <div id="fridge-warning" class="fridge-warning hidden">
+            <div class="warning-content">
+                <h4>⚠️ 冰箱门开启过久</h4>
+                <p>冰箱门开启超过5秒会增加能耗</p>
+                <div class="timer-display">
+                    <span id="fridge-timer">5</span>秒
+                </div>
+            </div>
+        </div>
+
+        <!-- Helper Character Tooltip -->
+        <div id="helper-tooltip" class="helper-tooltip hidden">
+            <div class="tooltip-content">
+                <div class="helper-avatar">🤖</div>
+                <p id="helper-text">试试打开窗户来替代电灯照明</p>
+                <button id="helper-close" class="tooltip-close">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="sfx-ding" preload="auto">
+        <source src="public/audio/sfx_ding.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-buzz" preload="auto">
+        <source src="public/audio/sfx_buzz.wav" type="audio/wav">
+    </audio>
+    <audio id="sfx-click" preload="auto">
+        <source src="public/audio/sfx_click.wav" type="audio/wav">
+    </audio>
+    <audio id="ambient-kitchen" preload="auto" loop>
+        <source src="public/audio/ambient_kitchen.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="scripts/scene3-level2.js"></script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - 10 Experiment Scenes</title>
+    <link rel="stylesheet" href="public/energy-experiments-styles.css">
+</head>
+<body>
+    <div class="experiments-container">
+        <!-- Navigation Header -->
+        <div class="experiment-nav">
+            <div class="nav-title">Energy Experiments Lab</div>
+            <div class="experiment-counter">
+                <span id="currentExp">1</span> / 10
+            </div>
+            <div class="nav-controls">
+                <button class="nav-btn" id="prevBtn" onclick="previousExperiment()" disabled>◀ Previous</button>
+                <button class="nav-btn" id="nextBtn" onclick="nextExperiment()">Next ▶</button>
+            </div>
+        </div>
+
+        <!-- Experiment 1: Solar Panel Efficiency -->
+        <div class="experiment active" id="exp1">
+            <div class="exp-title">Experiment 1: Solar Panel Efficiency</div>
+            <div class="exp-description">Adjust solar panel angles to maximize energy output</div>
+            
+            <div class="exp-area solar-lab">
+                <div class="sun" id="sun1">☀️</div>
+                <div class="solar-panel" id="panel1" data-angle="0">
+                    <div class="panel-surface"></div>
+                    <div class="angle-indicator">0°</div>
+                </div>
+                <div class="solar-panel" id="panel2" data-angle="45">
+                    <div class="panel-surface"></div>
+                    <div class="angle-indicator">45°</div>
+                </div>
+                <div class="solar-panel" id="panel3" data-angle="90">
+                    <div class="panel-surface"></div>
+                    <div class="angle-indicator">90°</div>
+                </div>
+                
+                <div class="energy-output">
+                    <div class="output-meter">
+                        <div class="meter-fill" id="solarOutput"></div>
+                    </div>
+                    <div class="output-value" id="solarValue">0 kWh</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="rotatePanels()">🔄 Rotate Panels</button>
+                    <button class="exp-btn" onclick="changeSunPosition()">☀️ Move Sun</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 2: Wind Turbine Power -->
+        <div class="experiment" id="exp2">
+            <div class="exp-title">Experiment 2: Wind Turbine Power Generation</div>
+            <div class="exp-description">Control wind speed to optimize turbine efficiency</div>
+            
+            <div class="exp-area wind-lab">
+                <div class="wind-turbine" id="turbine1">
+                    <div class="turbine-blades rotating"></div>
+                    <div class="turbine-tower"></div>
+                </div>
+                <div class="wind-turbine" id="turbine2">
+                    <div class="turbine-blades rotating-slow"></div>
+                    <div class="turbine-tower"></div>
+                </div>
+                <div class="wind-turbine" id="turbine3">
+                    <div class="turbine-blades rotating-fast"></div>
+                    <div class="turbine-tower"></div>
+                </div>
+                
+                <div class="wind-indicator">
+                    <div class="wind-speed">Wind: <span id="windSpeed">15</span> km/h</div>
+                    <div class="wind-direction">🌪️</div>
+                </div>
+                
+                <div class="power-generation">
+                    <div class="gen-meter">
+                        <div class="meter-fill" id="windOutput"></div>
+                    </div>
+                    <div class="gen-value" id="windValue">0 MW</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="increaseWind()">💨 Increase Wind</button>
+                    <button class="exp-btn" onclick="decreaseWind()">🌬️ Decrease Wind</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 3: Battery Storage System -->
+        <div class="experiment" id="exp3">
+            <div class="exp-title">Experiment 3: Battery Storage Optimization</div>
+            <div class="exp-description">Manage energy storage and distribution</div>
+            
+            <div class="exp-area battery-lab">
+                <div class="battery-bank">
+                    <div class="battery" id="bat1" data-charge="80">
+                        <div class="battery-level"></div>
+                        <div class="battery-label">Battery 1: 80%</div>
+                    </div>
+                    <div class="battery" id="bat2" data-charge="45">
+                        <div class="battery-level"></div>
+                        <div class="battery-label">Battery 2: 45%</div>
+                    </div>
+                    <div class="battery" id="bat3" data-charge="90">
+                        <div class="battery-level"></div>
+                        <div class="battery-label">Battery 3: 90%</div>
+                    </div>
+                </div>
+                
+                <div class="energy-flow">
+                    <div class="flow-arrow" id="chargeFlow">⚡</div>
+                    <div class="flow-arrow" id="dischargeFlow">🔋</div>
+                </div>
+                
+                <div class="load-demand">
+                    <div class="demand-meter">
+                        <div class="meter-fill" id="demandLevel"></div>
+                    </div>
+                    <div class="demand-value" id="demandValue">150 kW</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="chargeBatteries()">⚡ Charge</button>
+                    <button class="exp-btn" onclick="dischargeBatteries()">🔋 Discharge</button>
+                    <button class="exp-btn" onclick="balanceLoad()">⚖️ Balance</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 4: Smart Grid Management -->
+        <div class="experiment" id="exp4">
+            <div class="exp-title">Experiment 4: Smart Grid Network</div>
+            <div class="exp-description">Route electricity through the most efficient paths</div>
+            
+            <div class="exp-area grid-lab">
+                <div class="power-plant" id="plant1">🏭</div>
+                <div class="power-plant" id="plant2">☀️</div>
+                <div class="power-plant" id="plant3">💨</div>
+                
+                <div class="grid-network">
+                    <svg class="grid-lines" id="gridSvg">
+                        <!-- Grid connections will be drawn here -->
+                    </svg>
+                </div>
+                
+                <div class="city-zones">
+                    <div class="zone residential" id="residential">🏘️</div>
+                    <div class="zone commercial" id="commercial">🏢</div>
+                    <div class="zone industrial" id="industrial">🏭</div>
+                </div>
+                
+                <div class="grid-status">
+                    <div class="status-item">Load: <span id="gridLoad">75%</span></div>
+                    <div class="status-item">Efficiency: <span id="gridEfficiency">92%</span></div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="optimizeGrid()">🔧 Optimize</button>
+                    <button class="exp-btn" onclick="switchSource()">🔄 Switch Source</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 5: Hydroelectric Dam -->
+        <div class="experiment" id="exp5">
+            <div class="exp-title">Experiment 5: Hydroelectric Power</div>
+            <div class="exp-description">Control water flow to generate maximum electricity</div>
+            
+            <div class="exp-area hydro-lab">
+                <div class="dam-structure">
+                    <div class="water-reservoir" id="reservoir">
+                        <div class="water-level" id="waterLevel"></div>
+                    </div>
+                    <div class="dam-wall"></div>
+                    <div class="turbine-house">
+                        <div class="water-turbine rotating" id="hydroTurbine"></div>
+                    </div>
+                </div>
+                
+                <div class="water-flow">
+                    <div class="flow-rate">Flow: <span id="flowRate">500</span> m³/s</div>
+                    <div class="water-pressure">Pressure: <span id="waterPressure">85</span> bar</div>
+                </div>
+                
+                <div class="power-output">
+                    <div class="hydro-meter">
+                        <div class="meter-fill" id="hydroOutput"></div>
+                    </div>
+                    <div class="hydro-value" id="hydroValue">0 MW</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="openGates()">🌊 Open Gates</button>
+                    <button class="exp-btn" onclick="closeGates()">🚪 Close Gates</button>
+                    <button class="exp-btn" onclick="adjustFlow()">⚙️ Adjust Flow</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 6: Geothermal Energy -->
+        <div class="experiment" id="exp6">
+            <div class="exp-title">Experiment 6: Geothermal Power Plant</div>
+            <div class="exp-description">Harness Earth's heat for clean energy</div>
+            
+            <div class="exp-area geo-lab">
+                <div class="geothermal-plant">
+                    <div class="drilling-site" id="drill1">🔧</div>
+                    <div class="steam-pipe" id="pipe1"></div>
+                    <div class="generator" id="geoGen">⚙️</div>
+                    <div class="cooling-tower" id="cooler">🌡️</div>
+                </div>
+                
+                <div class="underground">
+                    <div class="heat-source" id="magma">🌋</div>
+                    <div class="temperature-reading">Temp: <span id="geoTemp">180</span>°C</div>
+                </div>
+                
+                <div class="steam-production">
+                    <div class="steam-meter">
+                        <div class="meter-fill" id="steamLevel"></div>
+                    </div>
+                    <div class="steam-value" id="steamValue">0 kg/s</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="deeperDrill()">⬇️ Drill Deeper</button>
+                    <button class="exp-btn" onclick="increasePressure()">💨 Increase Pressure</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 7: Nuclear Reactor -->
+        <div class="experiment" id="exp7">
+            <div class="exp-title">Experiment 7: Nuclear Power Control</div>
+            <div class="exp-description">Safely control nuclear fission for power generation</div>
+            
+            <div class="exp-area nuclear-lab">
+                <div class="reactor-core">
+                    <div class="fuel-rods" id="fuelRods">
+                        <div class="rod active" id="rod1">⚛️</div>
+                        <div class="rod active" id="rod2">⚛️</div>
+                        <div class="rod" id="rod3">⚛️</div>
+                        <div class="rod" id="rod4">⚛️</div>
+                    </div>
+                    <div class="control-rods" id="controlRods">
+                        <div class="c-rod" id="crod1">🔧</div>
+                        <div class="c-rod" id="crod2">🔧</div>
+                    </div>
+                </div>
+                
+                <div class="reactor-status">
+                    <div class="temperature">Core Temp: <span id="coreTemp">300</span>°C</div>
+                    <div class="radiation">Radiation: <span id="radiation">Safe</span></div>
+                    <div class="coolant">Coolant: <span id="coolant">Normal</span></div>
+                </div>
+                
+                <div class="power-output">
+                    <div class="nuclear-meter">
+                        <div class="meter-fill" id="nuclearOutput"></div>
+                    </div>
+                    <div class="nuclear-value" id="nuclearValue">0 GW</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="insertControlRods()">🔧 Insert Rods</button>
+                    <button class="exp-btn" onclick="withdrawControlRods()">⬆️ Withdraw Rods</button>
+                    <button class="exp-btn" onclick="emergencyShutdown()">🚨 Emergency Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 8: Biomass Energy -->
+        <div class="experiment" id="exp8">
+            <div class="exp-title">Experiment 8: Biomass Power Generation</div>
+            <div class="exp-description">Convert organic waste into clean energy</div>
+            
+            <div class="exp-area biomass-lab">
+                <div class="biomass-input">
+                    <div class="waste-type" id="wood">🪵</div>
+                    <div class="waste-type" id="crops">🌾</div>
+                    <div class="waste-type" id="organic">🍃</div>
+                </div>
+                
+                <div class="conversion-process">
+                    <div class="combustion-chamber" id="chamber">
+                        <div class="flames" id="flames">🔥</div>
+                    </div>
+                    <div class="steam-generator" id="steamGen">💨</div>
+                    <div class="turbine" id="bioTurbine">⚙️</div>
+                </div>
+                
+                <div class="efficiency-stats">
+                    <div class="carbon-neutral">CO₂: <span id="carbonLevel">Neutral</span></div>
+                    <div class="ash-production">Ash: <span id="ashLevel">5%</span></div>
+                </div>
+                
+                <div class="power-output">
+                    <div class="biomass-meter">
+                        <div class="meter-fill" id="biomassOutput"></div>
+                    </div>
+                    <div class="biomass-value" id="biomassValue">0 MW</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="addBiomass()">🌿 Add Biomass</button>
+                    <button class="exp-btn" onclick="optimizeBurn()">🔥 Optimize Burn</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 9: Tidal Energy -->
+        <div class="experiment" id="exp9">
+            <div class="exp-title">Experiment 9: Tidal Power Harvesting</div>
+            <div class="exp-description">Capture ocean tidal movements for electricity</div>
+            
+            <div class="exp-area tidal-lab">
+                <div class="ocean-scene">
+                    <div class="tide-level" id="tideLevel"></div>
+                    <div class="tidal-turbines">
+                        <div class="t-turbine" id="tTurbine1">🌊</div>
+                        <div class="t-turbine" id="tTurbine2">🌊</div>
+                        <div class="t-turbine" id="tTurbine3">🌊</div>
+                    </div>
+                    <div class="underwater-cables"></div>
+                </div>
+                
+                <div class="tide-info">
+                    <div class="tide-height">Height: <span id="tideHeight">2.5</span>m</div>
+                    <div class="tide-speed">Speed: <span id="tideSpeed">3.2</span> m/s</div>
+                    <div class="tide-cycle">Cycle: <span id="tideCycle">High</span></div>
+                </div>
+                
+                <div class="power-output">
+                    <div class="tidal-meter">
+                        <div class="meter-fill" id="tidalOutput"></div>
+                    </div>
+                    <div class="tidal-value" id="tidalValue">0 MW</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="simulateHighTide()">🌊 High Tide</button>
+                    <button class="exp-btn" onclick="simulateLowTide()">🌊 Low Tide</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experiment 10: Fusion Reactor -->
+        <div class="experiment" id="exp10">
+            <div class="exp-title">Experiment 10: Nuclear Fusion (Future Energy)</div>
+            <div class="exp-description">Control plasma fusion for unlimited clean energy</div>
+            
+            <div class="exp-area fusion-lab">
+                <div class="fusion-reactor">
+                    <div class="plasma-chamber" id="plasmaChamber">
+                        <div class="plasma-core" id="plasmaCore">⭐</div>
+                        <div class="magnetic-field" id="magneticField">🧲</div>
+                    </div>
+                    <div class="containment-field" id="containment"></div>
+                </div>
+                
+                <div class="fusion-stats">
+                    <div class="plasma-temp">Plasma: <span id="plasmaTemp">100M</span>°C</div>
+                    <div class="magnetic-strength">Magnetic: <span id="magneticStr">15</span> Tesla</div>
+                    <div class="fusion-rate">Fusion: <span id="fusionRate">0</span> reactions/s</div>
+                </div>
+                
+                <div class="power-output">
+                    <div class="fusion-meter">
+                        <div class="meter-fill" id="fusionOutput"></div>
+                    </div>
+                    <div class="fusion-value" id="fusionValue">0 TW</div>
+                </div>
+                
+                <div class="controls">
+                    <button class="exp-btn" onclick="increaseMagnetic()">🧲 Increase Field</button>
+                    <button class="exp-btn" onclick="heatPlasma()">🔥 Heat Plasma</button>
+                    <button class="exp-btn" onclick="initiateFusion()">⭐ Start Fusion</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <!-- Completion Modal -->
+        <div class="modal hidden" id="completionModal">
+            <div class="modal-content">
+                <div class="completion-animation">
+                    <div class="scientist-avatar">👨‍🔬</div>
+                    <div class="completion-message">
+                        <h2>Semua Experiment Selesai!</h2>
+                        <p>Anda telah menguasai 10 teknologi energi masa depan!</p>
+                    </div>
+                </div>
+                <button class="exp-btn primary" onclick="returnToMainMenu()">Kembali ke Menu Utama</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/energy-experiments.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Map & Puzzle Game</title>
+    <link rel="stylesheet" href="public/energy-game-styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- HUD -->
+        <div class="hud">
+            <div class="power-meter">
+                <div class="meter-label">Power Usage</div>
+                <div class="meter-bar">
+                    <div class="meter-fill" id="powerFill"></div>
+                </div>
+                <div class="meter-value" id="powerValue">0W</div>
+            </div>
+            <div class="keys-collected">
+                <div class="key-slot" id="key1">🔑</div>
+                <div class="key-slot" id="key2">🔑</div>
+                <div class="key-slot" id="key3">🔑</div>
+            </div>
+        </div>
+
+        <!-- Mini Map -->
+        <div class="mini-map">
+            <div class="zone-indicator" id="zone1" data-zone="living-room">Ruang Tamu</div>
+            <div class="zone-indicator" id="zone2" data-zone="kitchen">Dapur</div>
+            <div class="zone-indicator" id="zone3" data-zone="lab">Laboratorium</div>
+            <div class="zone-indicator" id="final-door" data-zone="door">Pintu Akhir</div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area" id="gameArea">
+            <!-- Zona 1: Ruang Tamu -->
+            <div class="zone active" id="livingRoom">
+                <div class="zone-title">Zona 1: Ruang Tamu</div>
+                <div class="zone-subtitle">Puzzle: Kabel Lampu & TV</div>
+                
+                <div class="room-layout living-room">
+                    <!-- Lampu -->
+                    <div class="lamp" id="lamp1" data-connected="false">
+                        <div class="lamp-bulb"></div>
+                        <div class="cable-point" data-cable="lamp1"></div>
+                    </div>
+                    <div class="lamp" id="lamp2" data-connected="false">
+                        <div class="lamp-bulb"></div>
+                        <div class="cable-point" data-cable="lamp2"></div>
+                    </div>
+                    
+                    <!-- TV -->
+                    <div class="tv" id="tv1" data-connected="false">
+                        <div class="tv-screen"></div>
+                        <div class="cable-point" data-cable="tv1"></div>
+                    </div>
+                    
+                    <!-- Power Outlets -->
+                    <div class="power-outlet" id="outlet1" data-type="correct">
+                        <div class="outlet-socket"></div>
+                    </div>
+                    <div class="power-outlet" id="outlet2" data-type="wrong">
+                        <div class="outlet-socket"></div>
+                    </div>
+                    <div class="power-outlet" id="outlet3" data-type="correct">
+                        <div class="outlet-socket"></div>
+                    </div>
+                    
+                    <!-- Cables -->
+                    <svg class="cable-layer" id="cableLayer">
+                        <!-- Cables will be drawn here dynamically -->
+                    </svg>
+                    
+                    <!-- Reward -->
+                    <div class="energy-key hidden" id="energyKey1">
+                        <div class="key-sparkle"></div>
+                        🔑
+                    </div>
+                </div>
+                
+                <div class="zone-controls">
+                    <button class="game-btn" onclick="resetZone1()">Reset</button>
+                    <button class="game-btn primary" onclick="nextZone()">Lanjut ke Dapur</button>
+                </div>
+            </div>
+
+            <!-- Zona 2: Dapur -->
+            <div class="zone" id="kitchen">
+                <div class="zone-title">Zona 2: Dapur</div>
+                <div class="zone-subtitle">Puzzle: Efisiensi Energi</div>
+                
+                <div class="room-layout kitchen">
+                    <!-- Appliances -->
+                    <div class="appliance" id="kitchenLight" data-power="20" data-active="false">
+                        <div class="appliance-icon">💡</div>
+                        <div class="appliance-label">Lampu (20W)</div>
+                    </div>
+                    
+                    <div class="appliance" id="window" data-power="-10" data-active="false">
+                        <div class="appliance-icon">🪟</div>
+                        <div class="appliance-label">Jendela (-10W)</div>
+                    </div>
+                    
+                    <div class="appliance" id="fridge" data-power="150" data-active="true">
+                        <div class="appliance-icon">🧊</div>
+                        <div class="appliance-label">Kulkas (150W)</div>
+                    </div>
+                    
+                    <div class="appliance" id="riceCooker" data-power="300" data-active="false">
+                        <div class="appliance-icon">🍚</div>
+                        <div class="appliance-label">Rice Cooker (300W)</div>
+                    </div>
+                    
+                    <!-- Efficiency Target -->
+                    <div class="efficiency-target">
+                        <div class="target-label">Target: 200W atau kurang</div>
+                        <div class="current-usage" id="currentUsage">150W</div>
+                    </div>
+                    
+                    <!-- Reward -->
+                    <div class="energy-key hidden" id="energyKey2">
+                        <div class="key-glow"></div>
+                        🔑
+                    </div>
+                </div>
+                
+                <div class="zone-controls">
+                    <button class="game-btn" onclick="resetZone2()">Reset</button>
+                    <button class="game-btn primary" onclick="nextZone()">Lanjut ke Lab</button>
+                </div>
+            </div>
+
+            <!-- Zona 3: Laboratorium -->
+            <div class="zone" id="lab">
+                <div class="zone-title">Zona 3: Laboratorium</div>
+                <div class="zone-subtitle">Puzzle: Simulasi Tagihan Listrik</div>
+                
+                <div class="room-layout lab">
+                    <!-- Lab Equipment -->
+                    <div class="lab-device" id="labLight" data-power="30" data-connected="false">
+                        <div class="device-icon">💡</div>
+                        <div class="device-label">Lampu Lab</div>
+                        <div class="connection-point" data-device="labLight"></div>
+                    </div>
+                    
+                    <div class="lab-device" id="ac" data-power="500" data-connected="false">
+                        <div class="device-icon">❄️</div>
+                        <div class="device-label">AC</div>
+                        <div class="connection-point" data-device="ac"></div>
+                    </div>
+                    
+                    <div class="lab-device" id="labTv" data-power="100" data-connected="false">
+                        <div class="device-icon">📺</div>
+                        <div class="device-label">TV Lab</div>
+                        <div class="connection-point" data-device="labTv"></div>
+                    </div>
+                    
+                    <div class="lab-device" id="labFridge" data-power="200" data-connected="false">
+                        <div class="device-icon">🧊</div>
+                        <div class="device-label">Kulkas Lab</div>
+                        <div class="connection-point" data-device="labFridge"></div>
+                    </div>
+                    
+                    <!-- Power Sources -->
+                    <div class="power-source" id="mainPower" data-capacity="400">
+                        <div class="source-label">Main Power (400W)</div>
+                        <div class="connection-hub"></div>
+                    </div>
+                    
+                    <div class="power-source" id="solarPower" data-capacity="300">
+                        <div class="source-label">Solar Power (300W)</div>
+                        <div class="connection-hub"></div>
+                    </div>
+                    
+                    <!-- Bill Simulation -->
+                    <div class="bill-simulation">
+                        <div class="bill-title">Tagihan Listrik</div>
+                        <div class="bill-amount" id="billAmount">Rp 0</div>
+                        <div class="efficiency-rating" id="efficiencyRating">⭐⭐⭐</div>
+                    </div>
+                    
+                    <!-- Connection Layer -->
+                    <svg class="connection-layer" id="connectionLayer">
+                        <!-- Connections will be drawn here -->
+                    </svg>
+                    
+                    <!-- Reward -->
+                    <div class="energy-key hidden" id="energyKey3">
+                        <div class="key-blueprint"></div>
+                        🔑
+                    </div>
+                </div>
+                
+                <div class="zone-controls">
+                    <button class="game-btn" onclick="resetZone3()">Reset</button>
+                    <button class="game-btn primary" onclick="openFinalDoor()">Buka Pintu Akhir</button>
+                </div>
+            </div>
+
+            <!-- Pintu Akhir -->
+            <div class="zone" id="finalDoor">
+                <div class="zone-title">Pintu Akhir</div>
+                <div class="zone-subtitle">Kombinasikan Semua Kunci Energi</div>
+                
+                <div class="final-door-area">
+                    <div class="door-mechanism">
+                        <div class="key-slots">
+                            <div class="key-slot-final" id="finalSlot1">🔑</div>
+                            <div class="key-slot-final" id="finalSlot2">🔑</div>
+                            <div class="key-slot-final" id="finalSlot3">🔑</div>
+                        </div>
+                        <div class="door-lever" id="doorLever">
+                            <div class="lever-handle"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="door" id="mainDoor">
+                        <div class="door-glow"></div>
+                    </div>
+                </div>
+                
+                <div class="zone-controls">
+                    <button class="game-btn primary" onclick="completeMission()">Selesaikan Misi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal hidden" id="successModal">
+        <div class="modal-content">
+            <div class="success-animation">
+                <div class="scientist-character">👨‍🔬</div>
+                <div class="success-message">
+                    <h2>Misi Berhasil!</h2>
+                    <p>Rumah kini terang dan efisien energi!</p>
+                </div>
+            </div>
+            <button class="game-btn primary" onclick="returnToMenu()">Kembali ke Menu</button>
+        </div>
+    </div>
+
+    <script src="scripts/energy-game-zones.js"></script>
+</body>
+</html>

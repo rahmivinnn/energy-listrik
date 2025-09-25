@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 2 - Level 1: 客厅 (基础电路)</title>
+    <link rel="stylesheet" href="public/main.css">
+    <link rel="stylesheet" href="public/scene2-level1.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Scene 2 Level 1: 客厅容器 -->
+    <div id="scene2-level1-container">
+        <!-- 背景图层 -->
+        <div id="living-room-background">
+            <img src="../../../Image/living room.png" alt="客厅背景" id="living-room-bg">
+        </div>
+
+        <!-- HUD 界面 -->
+        <div id="level1-hud">
+            <!-- 左侧面板 -->
+            <div class="left-panel">
+                <div class="character-display">
+                    <img src="../../../Image/2 karakter.png" alt="角色" class="character-avatar">
+                </div>
+                <div class="inventory-panel">
+                    <h3>能量钥匙</h3>
+                    <div id="energy-keys-container">
+                        <!-- 能量钥匙将动态添加到这里 -->
+                    </div>
+                </div>
+                <div class="power-status">
+                    <h3>电力状态</h3>
+                    <div class="power-indicator">
+                        <span id="living-room-power-status">❌ 客厅断电</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧控制面板 -->
+            <div class="right-panel">
+                <div class="level-info">
+                    <h2>Level 1: 客厅基础电路</h2>
+                    <p>目标: 修复电路，点亮客厅</p>
+                </div>
+                <div class="progress-tracker">
+                    <div class="task-item" id="task-cable">
+                        <span class="task-icon">🔌</span>
+                        <span class="task-text">修复电缆连接</span>
+                        <span class="task-status">⏳</span>
+                    </div>
+                    <div class="task-item" id="task-tv">
+                        <span class="task-icon">📺</span>
+                        <span class="task-text">启动电视</span>
+                        <span class="task-status">🔒</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要游戏区域 -->
+        <div id="living-room-main">
+            <!-- 角色助手 SVG -->
+            <div id="character-guide" class="character-guide">
+                <svg width="120" height="150" viewBox="0 0 120 150" class="character-svg">
+                    <!-- 身体 -->
+                    <ellipse cx="60" cy="100" rx="25" ry="35" fill="#4A90E2" stroke="#2E5C8A" stroke-width="2" class="character-body"/>
+                    <!-- 头部 -->
+                    <circle cx="60" cy="45" r="20" fill="#FFE4B5" stroke="#D4A574" stroke-width="2" class="character-head"/>
+                    <!-- 眼睛 -->
+                    <circle cx="55" cy="40" r="3" fill="#333" class="character-eye-left"/>
+                    <circle cx="65" cy="40" r="3" fill="#333" class="character-eye-right"/>
+                    <!-- 嘴巴 -->
+                    <path d="M 52 50 Q 60 55 68 50" stroke="#333" stroke-width="2" fill="none" class="character-mouth"/>
+                    <!-- 手臂 -->
+                    <line x1="35" y1="85" x2="25" y2="110" stroke="#FFE4B5" stroke-width="8" stroke-linecap="round" class="character-arm-left"/>
+                    <line x1="85" y1="85" x2="95" y2="110" stroke="#FFE4B5" stroke-width="8" stroke-linecap="round" class="character-arm-right"/>
+                    <!-- 腿 -->
+                    <line x1="50" y1="130" x2="45" y2="145" stroke="#4A90E2" stroke-width="10" stroke-linecap="round" class="character-leg-left"/>
+                    <line x1="70" y1="130" x2="75" y2="145" stroke="#4A90E2" stroke-width="10" stroke-linecap="round" class="character-leg-right"/>
+                    <!-- 工具带 -->
+                    <rect x="45" y="95" width="30" height="8" fill="#8B4513" rx="2" class="character-belt"/>
+                    <circle cx="52" cy="99" r="3" fill="#FFD700" class="character-tool"/>
+                    <circle cx="60" cy="99" r="3" fill="#C0C0C0" class="character-tool"/>
+                    <circle cx="68" cy="99" r="3" fill="#FF6B6B" class="character-tool"/>
+                </svg>
+                <div class="character-speech-bubble hidden" id="character-speech">
+                    <div class="speech-content">
+                        <p id="speech-text">Halo! Saya akan membantu kamu belajar hemat energi!</p>
+                    </div>
+                    <div class="speech-arrow"></div>
+                </div>
+            </div>
+            
+            <!-- 交互对象 -->
+            <div class="interactive-objects">
+                <!-- 电池 -->
+                <div class="interactive-item battery" id="battery-obj" data-object="battery">
+                    <div class="object-highlight"></div>
+                    <div class="object-label">电池</div>
+                </div>
+
+                <!-- 开关 -->
+                <div class="interactive-item switch" id="switch-obj" data-object="switch">
+                    <div class="object-highlight"></div>
+                    <div class="object-label">开关</div>
+                    <svg width="50" height="70" viewBox="0 0 50 70" class="switch-svg">
+                        <!-- Switch Plate -->
+                        <rect x="10" y="10" width="30" height="50" rx="5" fill="#F5F5F5" stroke="#DDD" stroke-width="2"/>
+                        <!-- Switch Toggle -->
+                        <rect x="15" y="25" width="20" height="15" rx="7" fill="#E0E0E0" stroke="#CCC" stroke-width="1" class="switch-toggle"/>
+                        <!-- Switch Button -->
+                        <circle cx="25" cy="32" r="6" fill="#FFF" stroke="#999" stroke-width="1" class="switch-button"/>
+                        <!-- Power Indicator -->
+                        <circle cx="25" cy="50" r="3" fill="#FF4444" class="switch-indicator" opacity="0.3"/>
+                        <!-- Screws -->
+                        <circle cx="17" cy="17" r="1.5" fill="#999"/>
+                        <circle cx="33" cy="17" r="1.5" fill="#999"/>
+                        <circle cx="17" cy="53" r="1.5" fill="#999"/>
+                        <circle cx="33" cy="53" r="1.5" fill="#999"/>
+                    </svg>
+                </div>
+
+                <!-- 灯泡 -->
+                <div class="interactive-item lamp" id="lamp-obj" data-object="lamp">
+                    <div class="object-highlight"></div>
+                    <div class="object-label">灯泡</div>
+                    <div class="lamp-glow" id="lamp-glow">
+                        <svg width="60" height="80" viewBox="0 0 60 80" class="lamp-svg">
+                            <!-- Lamp Base -->
+                            <rect x="20" y="65" width="20" height="10" rx="2" fill="#8B4513"/>
+                            <!-- Lamp Neck -->
+                            <rect x="27" y="55" width="6" height="15" fill="#A0522D"/>
+                            <!-- Bulb -->
+                            <circle cx="30" cy="35" r="20" fill="#FFF8DC" stroke="#E6E6FA" stroke-width="2" class="lamp-bulb"/>
+                            <!-- Filament -->
+                            <path d="M 20 35 Q 30 25 40 35 Q 30 45 20 35" stroke="#FFD700" stroke-width="1" fill="none" class="lamp-filament" opacity="0"/>
+                            <!-- Glow Effect -->
+                            <circle cx="30" cy="35" r="25" fill="url(#lampGlow)" class="lamp-glow-effect" opacity="0"/>
+                            <!-- Gradient Definition -->
+                            <defs>
+                                <radialGradient id="lampGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" style="stop-color:#FFFF99;stop-opacity:0.8" />
+                                    <stop offset="70%" style="stop-color:#FFD700;stop-opacity:0.4" />
+                                    <stop offset="100%" style="stop-color:#FFA500;stop-opacity:0" />
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 电视 -->
+                <div class="interactive-item tv" id="tv-obj" data-object="tv">
+                    <div class="object-highlight"></div>
+                    <div class="object-label">老式电视</div>
+                    <div class="tv-screen" id="tv-screen">
+                        <svg width="80" height="60" viewBox="0 0 80 60" class="tv-svg">
+                            <!-- TV Body -->
+                            <rect x="5" y="10" width="70" height="45" rx="5" fill="#2D2D2D" stroke="#1A1A1A" stroke-width="2"/>
+                            <!-- Screen -->
+                            <rect x="10" y="15" width="60" height="35" rx="2" fill="#000" class="tv-screen-area"/>
+                            <!-- Screen Content (when on) -->
+                            <rect x="10" y="15" width="60" height="35" rx="2" fill="url(#tvGradient)" class="tv-screen-content" opacity="0"/>
+                            <!-- Power Button -->
+                            <circle cx="15" cy="52" r="3" fill="#FF4444" class="tv-power-btn"/>
+                            <!-- Antenna -->
+                            <line x1="40" y1="10" x2="35" y2="2" stroke="#666" stroke-width="2"/>
+                            <line x1="40" y1="10" x2="45" y2="2" stroke="#666" stroke-width="2"/>
+                            <!-- Gradient Definition -->
+                            <defs>
+                                <linearGradient id="tvGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:0.8" />
+                                    <stop offset="50%" style="stop-color:#87CEEB;stop-opacity:0.6" />
+                                    <stop offset="100%" style="stop-color:#4A90E2;stop-opacity:0.8" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 电缆桌子区域 -->
+                <div class="interactive-item cable-table" id="cable-table-obj" data-object="cable_table">
+                    <div class="object-highlight"></div>
+                    <div class="object-label">电缆工作台</div>
+                    <div class="cable-pieces-preview">
+                        <div class="cable-piece"></div>
+                        <div class="cable-piece"></div>
+                        <div class="cable-piece"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 提示气泡 -->
+            <div id="hint-bubble" class="hint-bubble hidden">
+                <div class="hint-content">
+                    <p id="hint-text"></p>
+                    <button id="hint-close">×</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Puzzle A: 电缆连接面板 -->
+        <div id="cable-puzzle-overlay" class="puzzle-overlay hidden">
+            <div class="puzzle-panel">
+                <div class="puzzle-header">
+                    <h3>修复电路连接</h3>
+                    <button id="cable-puzzle-close" class="close-btn">×</button>
+                </div>
+                <div class="puzzle-content">
+                    <div class="circuit-grid" id="circuit-grid">
+                        <!-- 电路组件网格 -->
+                        <div class="grid-slot" data-slot="battery-pos" data-type="battery-positive">
+                            <div class="slot-label">电池 (+)</div>
+                        </div>
+                        <div class="grid-slot" data-slot="switch" data-type="switch">
+                            <div class="slot-label">开关</div>
+                        </div>
+                        <div class="grid-slot" data-slot="lamp" data-type="lamp">
+                            <div class="slot-label">灯泡</div>
+                        </div>
+                        <div class="grid-slot" data-slot="battery-neg" data-type="battery-negative">
+                            <div class="slot-label">电池 (-)</div>
+                        </div>
+                    </div>
+                    <div class="components-area">
+                        <h4>拖拽组件到正确位置</h4>
+                        <div class="draggable-components">
+                            <div class="component" data-component="battery-positive" draggable="true">
+                                <div class="component-icon">🔋+</div>
+                                <div class="component-label">电池正极</div>
+                            </div>
+                            <div class="component" data-component="switch" draggable="true">
+                                <div class="component-icon">🔘</div>
+                                <div class="component-label">开关</div>
+                            </div>
+                            <div class="component" data-component="lamp" draggable="true">
+                                <div class="component-icon">💡</div>
+                                <div class="component-label">灯泡</div>
+                            </div>
+                            <div class="component" data-component="battery-negative" draggable="true">
+                                <div class="component-icon">🔋-</div>
+                                <div class="component-label">电池负极</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cable-connections" id="cable-connections">
+                        <!-- 电缆连接线将在这里动态绘制 -->
+                        <svg id="connection-svg" width="100%" height="100%">
+                            <!-- 连接线将通过JavaScript动态添加 -->
+                        </svg>
+                    </div>
+                </div>
+                <div class="puzzle-controls">
+                    <button id="test-circuit" class="puzzle-btn">测试电路</button>
+                    <button id="reset-circuit" class="puzzle-btn secondary">重置</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Puzzle B: TV 控制面板 -->
+        <div id="tv-puzzle-overlay" class="puzzle-overlay hidden">
+            <div class="puzzle-panel">
+                <div class="puzzle-header">
+                    <h3>启动老式电视</h3>
+                    <button id="tv-puzzle-close" class="close-btn">×</button>
+                </div>
+                <div class="puzzle-content">
+                    <div class="tv-front-panel">
+                        <div class="tv-screen-large" id="tv-screen-large">
+                            <div class="screen-static" id="screen-static"></div>
+                            <div class="screen-content" id="screen-content"></div>
+                        </div>
+                        <div class="tv-controls">
+                            <div class="control-step" data-step="1" id="step-cable">
+                                <div class="step-icon">🔌</div>
+                                <div class="step-label">插入电源线</div>
+                                <div class="step-status">⏳</div>
+                            </div>
+                            <div class="control-step" data-step="2" id="step-switch">
+                                <div class="step-icon">🔘</div>
+                                <div class="step-label">打开主开关</div>
+                                <div class="step-status">🔒</div>
+                            </div>
+                            <div class="control-step" data-step="3" id="step-power">
+                                <div class="step-icon">⚡</div>
+                                <div class="step-label">按电源按钮</div>
+                                <div class="step-status">🔒</div>
+                            </div>
+                            <div class="control-step" data-step="4" id="step-channel">
+                                <div class="step-icon">📡</div>
+                                <div class="step-label">调整频道</div>
+                                <div class="step-status">🔒</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成功消息面板 -->
+        <div id="success-message" class="message-overlay hidden">
+            <div class="message-panel">
+                <div class="message-content">
+                    <div class="success-icon">🎉</div>
+                    <h3 id="success-title">恭喜!</h3>
+                    <p id="success-text"></p>
+                    <div class="reward-display" id="reward-display">
+                        <!-- 奖励动画将在这里显示 -->
+                    </div>
+                </div>
+                <button id="success-continue" class="continue-btn">继续</button>
+            </div>
+        </div>
+
+        <!-- 教育信息面板 -->
+        <div id="educational-popup" class="popup-overlay hidden">
+            <div class="popup-panel">
+                <div class="popup-header">
+                    <h3 id="edu-title">知识点</h3>
+                    <button id="edu-close" class="close-btn">×</button>
+                </div>
+                <div class="popup-content">
+                    <p id="edu-content"></p>
+                    <div class="edu-expand" id="edu-expand">
+                        <button id="edu-expand-btn">了解更多</button>
+                        <div class="edu-detail" id="edu-detail"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 音频元素 -->
+    <!-- Background Music -->
+    <audio id="background-music" preload="auto" loop>
+        <source src="public/audio/background_music.mp3" type="audio/mpeg">
+        <source src="../../../sound/sound.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Dramatic Sound for Videos -->
+    <audio id="dramatic-sound" preload="auto">
+        <source src="public/audio/dramatic_sound.mp3" type="audio/mpeg">
+        <source src="../../../sound/sound.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Game Sound Effects -->
+    <audio id="sfx-click-success" preload="auto">
+        <source src="../../../sound/sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-buzz" preload="auto">
+        <source src="../../../sound/sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-ding" preload="auto">
+        <source src="../../../sound/sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- JavaScript -->
+    <script src="scripts/scene2-level1.js"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Main Game</title>
+    <link rel="stylesheet" href="public/main-game.css">
+    <link rel="icon" type="image/x-icon" href="public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="public/audio-manager.js"></script>
+</head>
+<body>
+    <!-- Background -->
+    <div id="game-background"></div>
+    
+    <!-- Game Container -->
+    <div id="game-container">
+        <!-- Header -->
+        <div id="game-header">
+            <h1 id="game-title">HUBUNGKAN LISTRIK</h1>
+            <p id="game-subtitle">Bantu karakter menyalakan lampu dengan menghubungkan kabel ke stop kontak</p>
+        </div>
+        
+        <!-- Character Instructions -->
+        <div id="character-instructions">
+            <div id="character-avatar">
+                <img src="public/avatar.png" alt="Character" id="character-img">
+            </div>
+            <div id="instruction-bubble">
+                <p>"Halo! Aku butuh bantuanmu untuk menghubungkan kabel listrik ke stop kontak agar lampu bisa menyala. Seret kabel dari sumber listrik ke stop kontak yang tepat!"</p>
+            </div>
+        </div>
+        
+        <!-- Game Area -->
+        <div id="game-area">
+            <!-- Power Source -->
+            <div id="power-source" class="draggable-item">
+                <i class="fas fa-plug"></i>
+                <span>Sumber Listrik</span>
+            </div>
+            
+            <!-- Cable -->
+            <div id="cable" class="draggable-item">
+                <div class="cable-line"></div>
+            </div>
+            
+            <!-- Stop Kontak -->
+            <div id="stop-kontak" class="drop-zone">
+                <i class="fas fa-plug"></i>
+                <span>Stop Kontak</span>
+            </div>
+            
+            <!-- Lamp -->
+            <div id="lamp" class="lamp-off">
+                <i class="fas fa-lightbulb"></i>
+                <span>Lampu</span>
+            </div>
+        </div>
+        
+        <!-- Game Controls -->
+        <div id="game-controls">
+            <button id="reset-btn" class="game-btn">
+                <i class="fas fa-redo"></i>
+                Reset
+            </button>
+            <button id="hint-btn" class="game-btn">
+                <i class="fas fa-question-circle"></i>
+                Petunjuk
+            </button>
+        </div>
+        
+        <!-- Success Message -->
+        <div id="success-message" style="display: none;">
+            <div class="success-content">
+                <i class="fas fa-check-circle"></i>
+                <h2>Selamat!</h2>
+                <p>Kamu berhasil menghubungkan listrik dan menyalakan lampu!</p>
+                <button id="continue-btn" class="game-btn primary">
+                    <i class="fas fa-arrow-right"></i>
+                    Lanjut ke Kuis
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Container (Hidden initially) -->
+    <div id="quiz-container" style="display: none;">
+        <div id="quiz-header">
+            <h1 id="quiz-title">KUIS ENERGI</h1>
+            <p id="quiz-subtitle">Uji pengetahuanmu tentang hemat energi!</p>
+        </div>
+        
+        <div id="quiz-content">
+            <div id="question-container">
+                <h3 id="question-number">Pertanyaan 1 dari 5</h3>
+                <p id="question-text"></p>
+                <div id="answers-container"></div>
+            </div>
+            
+            <div id="quiz-controls">
+                <button id="prev-question" class="quiz-btn" disabled>
+                    <i class="fas fa-arrow-left"></i>
+                    Sebelumnya
+                </button>
+                <button id="next-question" class="quiz-btn" disabled>
+                    Lanjut
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Quiz Results -->
+        <div id="quiz-results" style="display: none;">
+            <div class="results-content">
+                <i class="fas fa-trophy"></i>
+                <h2>Hasil Kuis</h2>
+                <p id="score-text"></p>
+                <div id="score-breakdown"></div>
+                <button id="back-to-menu" class="game-btn primary">
+                    <i class="fas fa-home"></i>
+                    Kembali ke Menu
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="scripts/main-game.js"></script>
+</body>
+</html>

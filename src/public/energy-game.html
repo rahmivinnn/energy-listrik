@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Hubungkan Listrik</title>
+    <link rel="stylesheet" href="energy-game.css">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <!-- Game Container -->
+    <div id="energy-game-container">
+        <!-- HUD (Heads Up Display) -->
+        <div id="game-hud">
+            <!-- Power Meter -->
+            <div id="power-meter">
+                <div class="meter-label">Konsumsi Energi</div>
+                <div class="meter-bar">
+                    <div id="power-fill" class="meter-fill"></div>
+                </div>
+                <div id="power-value" class="meter-value">0 kWh</div>
+            </div>
+            
+            <!-- Energy Keys Collected -->
+            <div id="energy-keys">
+                <div class="keys-label">Kunci Energi</div>
+                <div class="keys-container">
+                    <div id="key-1" class="energy-key locked">
+                        <div class="key-icon">🔑</div>
+                        <div class="key-label">Ruang Tamu</div>
+                    </div>
+                    <div id="key-2" class="energy-key locked">
+                        <div class="key-icon">🔑</div>
+                        <div class="key-label">Dapur</div>
+                    </div>
+                    <div id="key-3" class="energy-key locked">
+                        <div class="key-icon">🔑</div>
+                        <div class="key-label">Laboratorium</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mini Map -->
+            <div id="mini-map">
+                <div class="map-label">Peta Rumah</div>
+                <div class="map-container">
+                    <div id="zone-living" class="map-zone active" data-zone="living">
+                        <div class="zone-icon">🏠</div>
+                        <div class="zone-name">Ruang Tamu</div>
+                    </div>
+                    <div id="zone-kitchen" class="map-zone" data-zone="kitchen">
+                        <div class="zone-icon">🍳</div>
+                        <div class="zone-name">Dapur</div>
+                    </div>
+                    <div id="zone-lab" class="map-zone" data-zone="lab">
+                        <div class="zone-icon">🔬</div>
+                        <div class="zone-name">Laboratorium</div>
+                    </div>
+                    <div id="zone-exit" class="map-zone locked" data-zone="exit">
+                        <div class="zone-icon">🚪</div>
+                        <div class="zone-name">Pintu Keluar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Game Area -->
+        <div id="game-world">
+            <!-- Zone 1: Living Room -->
+            <div id="living-room-zone" class="game-zone active">
+                <div class="zone-background living-bg"></div>
+                <div class="zone-title">
+                    <h2>HUBUNGKAN LISTRIK</h2>
+                    <p>Bantu karakter menyalakan lampu dengan menghubungkan kabel ke stop kontak</p>
+                </div>
+                
+                <!-- Character -->
+                <div id="character" class="character">
+                    <img src="Image/avatar.png" alt="Character">
+                    <div class="character-speech">
+                        <p>"Halo! Aku butuh bantuanmu untuk menghubungkan kabel listrik ke stop kontak agar lampu bisa menyala. Seret kabel dari sumber listrik ke stop kontak yang tepat!"</p>
+                    </div>
+                </div>
+                
+                <!-- Interactive Objects -->
+                <div class="interactive-objects">
+                    <!-- Power Sources -->
+                    <div id="power-source-1" class="power-source" data-source="main-power">
+                        <div class="source-icon">⚡</div>
+                        <div class="source-label">Sumber Listrik Utama</div>
+                        <div class="cable-start" data-cable="main"></div>
+                    </div>
+                    
+                    <div id="power-source-2" class="power-source" data-source="backup-power">
+                        <div class="source-icon">🔋</div>
+                        <div class="source-label">Sumber Listrik Cadangan</div>
+                        <div class="cable-start" data-cable="backup"></div>
+                    </div>
+                    
+                    <!-- Cable System -->
+                    <div id="cable-system">
+                        <svg id="cable-svg" width="100%" height="100%">
+                            <!-- Cables will be drawn here dynamically -->
+                        </svg>
+                    </div>
+                    
+                    <!-- Outlets -->
+                    <div id="outlet-1" class="outlet" data-device="lamp" data-outlet="lamp-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Lampu</div>
+                    </div>
+                    
+                    <div id="outlet-2" class="outlet" data-device="tv" data-outlet="tv-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak TV</div>
+                    </div>
+                    
+                    <div id="outlet-3" class="outlet" data-device="fan" data-outlet="fan-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Kipas</div>
+                    </div>
+                    
+                    <div id="outlet-4" class="outlet" data-device="computer" data-outlet="computer-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Komputer</div>
+                    </div>
+                    
+                    <div id="outlet-5" class="outlet" data-device="microwave" data-outlet="microwave-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Microwave</div>
+                    </div>
+                    
+                    <div id="outlet-6" class="outlet" data-device="printer" data-outlet="printer-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Printer</div>
+                    </div>
+                    
+                    <div id="outlet-7" class="outlet" data-device="radio" data-outlet="radio-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Radio</div>
+                    </div>
+                    
+                    <div id="outlet-8" class="outlet" data-device="charger" data-outlet="charger-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Charger</div>
+                    </div>
+                    
+                    <div id="outlet-9" class="outlet" data-device="blender" data-outlet="blender-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Blender</div>
+                    </div>
+                    
+                    <div id="outlet-10" class="outlet" data-device="vacuum" data-outlet="vacuum-outlet">
+                        <div class="outlet-icon">🔌</div>
+                        <div class="outlet-label">Stop Kontak Vacuum</div>
+                    </div>
+                    
+                    <!-- Devices -->
+                    <div id="lamp" class="device lamp off">
+                        <div class="device-icon">💡</div>
+                        <div class="device-label">Lampu</div>
+                    </div>
+                    
+                    <div id="tv" class="device tv off">
+                        <div class="device-icon">📺</div>
+                        <div class="device-label">TV</div>
+                    </div>
+                    
+                    <div id="fan" class="device fan off">
+                        <div class="device-icon">🌀</div>
+                        <div class="device-label">Kipas Angin</div>
+                    </div>
+                    
+                    <div id="computer" class="device computer off">
+                        <div class="device-icon">💻</div>
+                        <div class="device-label">Komputer</div>
+                    </div>
+                    
+                    <div id="microwave" class="device microwave off">
+                        <div class="device-icon">📱</div>
+                        <div class="device-label">Microwave</div>
+                    </div>
+                    
+                    <div id="printer" class="device printer off">
+                        <div class="device-icon">🖨️</div>
+                        <div class="device-label">Printer</div>
+                    </div>
+                    
+                    <div id="radio" class="device radio off">
+                        <div class="device-icon">📻</div>
+                        <div class="device-label">Radio</div>
+                    </div>
+                    
+                    <div id="charger" class="device charger off">
+                        <div class="device-icon">🔋</div>
+                        <div class="device-label">Charger HP</div>
+                    </div>
+                    
+                    <div id="blender" class="device blender off">
+                        <div class="device-icon">🥤</div>
+                        <div class="device-label">Blender</div>
+                    </div>
+                    
+                    <div id="vacuum" class="device vacuum off">
+                        <div class="device-icon">🧹</div>
+                        <div class="device-label">Vacuum Cleaner</div>
+                    </div>
+                </div>
+                
+                <!-- Zone Completion Reward -->
+                <div id="living-reward" class="zone-reward hidden">
+                    <div class="reward-sparkle"></div>
+                    <div class="energy-key-reward">
+                        <div class="key-icon">🔑</div>
+                        <div class="key-text">Kunci Energi 1</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zone 2: Kitchen -->
+            <div id="kitchen-zone" class="game-zone">
+                <div class="zone-background kitchen-bg"></div>
+                <div class="zone-title">
+                    <h2>EFISIENSI ENERGI DAPUR</h2>
+                    <p>Optimalkan penggunaan listrik di dapur untuk efisiensi maksimal</p>
+                </div>
+                
+                <!-- Kitchen Objects -->
+                <div class="interactive-objects">
+                    <div id="kitchen-light" class="kitchen-device" data-power="20">
+                        <div class="device-icon">💡</div>
+                        <div class="device-label">Lampu Dapur</div>
+                        <div class="device-toggle">OFF</div>
+                    </div>
+                    
+                    <div id="kitchen-window" class="kitchen-device" data-power="-10">
+                        <div class="device-icon">🪟</div>
+                        <div class="device-label">Jendela</div>
+                        <div class="device-toggle">TUTUP</div>
+                    </div>
+                    
+                    <div id="refrigerator" class="kitchen-device" data-power="150">
+                        <div class="device-icon">🧊</div>
+                        <div class="device-label">Kulkas</div>
+                        <div class="device-toggle">ON</div>
+                    </div>
+                    
+                    <div id="rice-cooker" class="kitchen-device" data-power="300">
+                        <div class="device-icon">🍚</div>
+                        <div class="device-label">Rice Cooker</div>
+                        <div class="device-toggle">OFF</div>
+                    </div>
+                </div>
+                
+                <!-- Efficiency Target -->
+                <div id="efficiency-target">
+                    <div class="target-label">Target Efisiensi: 200-250 kWh</div>
+                    <div id="current-usage" class="current-usage">Penggunaan Saat Ini: 150 kWh</div>
+                </div>
+                
+                <!-- Zone Completion Reward -->
+                <div id="kitchen-reward" class="zone-reward hidden">
+                    <div class="reward-sparkle"></div>
+                    <div class="energy-key-reward">
+                        <div class="key-icon">🔑</div>
+                        <div class="key-text">Kunci Energi 2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zone 3: Laboratory -->
+            <div id="lab-zone" class="game-zone">
+                <div class="zone-background lab-bg"></div>
+                <div class="zone-title">
+                    <h2>SIMULASI TAGIHAN LISTRIK</h2>
+                    <p>Atur semua perangkat untuk efisiensi maksimal dan tagihan minimal</p>
+                </div>
+                
+                <!-- Lab Equipment -->
+                <div class="interactive-objects">
+                    <div id="lab-lights" class="lab-device" data-power="50">
+                        <div class="device-icon">💡</div>
+                        <div class="device-label">Lampu Lab</div>
+                        <div class="device-slider">
+                            <input type="range" min="0" max="100" value="50" class="power-slider">
+                            <span class="slider-value">50%</span>
+                        </div>
+                    </div>
+                    
+                    <div id="lab-ac" class="lab-device" data-power="200">
+                        <div class="device-icon">❄️</div>
+                        <div class="device-label">AC Lab</div>
+                        <div class="device-slider">
+                            <input type="range" min="0" max="100" value="70" class="power-slider">
+                            <span class="slider-value">70%</span>
+                        </div>
+                    </div>
+                    
+                    <div id="lab-equipment" class="lab-device" data-power="300">
+                        <div class="device-icon">🔬</div>
+                        <div class="device-label">Peralatan Lab</div>
+                        <div class="device-slider">
+                            <input type="range" min="0" max="100" value="80" class="power-slider">
+                            <span class="slider-value">80%</span>
+                        </div>
+                    </div>
+                    
+                    <div id="lab-computer" class="lab-device" data-power="100">
+                        <div class="device-icon">💻</div>
+                        <div class="device-label">Komputer</div>
+                        <div class="device-slider">
+                            <input type="range" min="0" max="100" value="90" class="power-slider">
+                            <span class="slider-value">90%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bill Simulation -->
+                <div id="bill-simulation">
+                    <div class="bill-container">
+                        <h3>Simulasi Tagihan Listrik</h3>
+                        <div class="bill-item">
+                            <span>Konsumsi Total:</span>
+                            <span id="total-consumption">520 kWh</span>
+                        </div>
+                        <div class="bill-item">
+                            <span>Tarif per kWh:</span>
+                            <span>Rp 1.500</span>
+                        </div>
+                        <div class="bill-total">
+                            <span>Total Tagihan:</span>
+                            <span id="total-bill">Rp 780.000</span>
+                        </div>
+                        <div class="efficiency-rating">
+                            <span>Rating Efisiensi:</span>
+                            <span id="efficiency-rating" class="rating-poor">Buruk</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Zone Completion Reward -->
+                <div id="lab-reward" class="zone-reward hidden">
+                    <div class="reward-sparkle"></div>
+                    <div class="energy-key-reward">
+                        <div class="key-icon">🔑</div>
+                        <div class="key-text">Kunci Energi 3</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Final Exit Zone -->
+            <div id="exit-zone" class="game-zone">
+                <div class="zone-background exit-bg"></div>
+                <div class="zone-title">
+                    <h2>PINTU KELUAR</h2>
+                    <p>Gunakan semua kunci energi untuk membuka pintu dan menyelesaikan misi</p>
+                </div>
+                
+                <!-- Exit Door -->
+                <div id="exit-door" class="exit-door locked">
+                    <div class="door-frame">
+                        <div class="door-panel">
+                            <div class="door-handle"></div>
+                            <div class="key-slots">
+                                <div class="key-slot" data-key="1">🔒</div>
+                                <div class="key-slot" data-key="2">🔒</div>
+                                <div class="key-slot" data-key="3">🔒</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="door-label">Pintu Keluar</div>
+                </div>
+                
+                <!-- Victory Animation -->
+                <div id="victory-animation" class="victory-animation hidden">
+                    <div class="victory-glow"></div>
+                    <div class="victory-text">
+                        <h2>SELAMAT!</h2>
+                        <p>Anda telah berhasil menyelesaikan misi efisiensi energi!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Cursor -->
+        <div id="ai-cursor" class="ai-cursor hidden">
+            <div class="cursor-glow"></div>
+            <div class="cursor-pointer">👆</div>
+        </div>
+        
+        <!-- Feedback Messages -->
+        <div id="feedback-container">
+            <!-- Dynamic feedback messages will appear here -->
+        </div>
+    </div>
+    
+    <!-- Game Scripts -->
+    <script src="audio-manager.js"></script>
+    <script type="module" src="energy-game.js"></script>
+</body>
+</html>

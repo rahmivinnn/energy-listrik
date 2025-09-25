@@ -1,0 +1,805 @@
+/* Unity-Style Game UI */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', 'Rajdhani', sans-serif;
+    overflow: hidden;
+    background: #0a0a0a;
+    color: #ffffff;
+    user-select: none;
+}
+
+/* Background Video */
+#background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+#background-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4) contrast(1.2);
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(0, 20, 40, 0.8) 0%, 
+        rgba(0, 40, 80, 0.6) 50%, 
+        rgba(0, 10, 30, 0.9) 100%);
+    z-index: -1;
+}
+
+/* Main Container */
+#main-menu-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Header Container */
+.header-container {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    text-align: right;
+    z-index: 10;
+}
+
+.main-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+.title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: -10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+/* Transparent button over Energy Quest text */
+.transparent-title-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 15;
+    transition: background-color 0.3s ease;
+}
+
+.transparent-title-btn:hover {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-radius: 10px;
+}
+
+.game-title-energy,
+.game-title-quest {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #FFD700;
+    text-shadow: 
+        0 0 5px rgba(255, 215, 0, 0.4),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 0.9;
+}
+
+.game-subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #00BFFF;
+    text-shadow: 
+        0 0 10px rgba(0, 191, 255, 0.6),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    letter-spacing: 2px;
+}
+
+/* Top Right Options */
+.top-options {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+}
+
+.small-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(145deg, 
+        rgba(0, 100, 200, 0.3) 0%, 
+        rgba(0, 50, 150, 0.5) 100%);
+    border: 2px solid rgba(0, 191, 255, 0.4);
+    border-radius: 25px;
+    color: #ffffff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.small-btn:hover {
+    background: linear-gradient(145deg, 
+        rgba(0, 150, 255, 0.4) 0%, 
+        rgba(0, 100, 200, 0.6) 100%);
+    border-color: rgba(0, 191, 255, 0.8);
+    box-shadow: 
+        0 6px 25px rgba(0, 191, 255, 0.3),
+        0 0 30px rgba(0, 191, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.small-btn i {
+    font-size: 1.1rem;
+    color: #00BFFF;
+}
+
+/* Level Menu (Left Side) */
+.level-menu {
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 5;
+}
+
+/* Unity-Style Buttons */
+.unity-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 30px;
+    width: 350px;
+    background: linear-gradient(145deg, 
+        rgba(10, 25, 50, 0.9) 0%, 
+        rgba(20, 40, 80, 0.8) 50%, 
+        rgba(5, 15, 35, 0.9) 100%);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    color: #ffffff;
+    font-family: 'Rajdhani', sans-serif;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(15px);
+    overflow: hidden;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(0, 191, 255, 0.3);
+    animation: buttonSlideIn 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+.unity-btn:nth-child(1) { animation-delay: 0.1s; }
+.unity-btn:nth-child(2) { animation-delay: 0.2s; }
+.unity-btn:nth-child(3) { animation-delay: 0.3s; }
+.unity-btn:nth-child(4) { animation-delay: 0.4s; }
+.unity-btn:nth-child(5) { animation-delay: 0.5s; }
+.unity-btn:nth-child(6) { animation-delay: 0.6s; }
+.unity-btn:nth-child(7) { animation-delay: 0.7s; }
+
+
+
+/* Quiz Button Special Styling */
+.unity-btn[data-level="quiz"] {
+    background: linear-gradient(145deg, 
+        rgba(50, 25, 10, 0.9) 0%, 
+        rgba(100, 50, 20, 0.8) 50%, 
+        rgba(35, 15, 5, 0.9) 100%);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(255, 165, 0, 0.3);
+}
+
+.unity-btn[data-level="quiz"]:hover {
+    background: linear-gradient(145deg, 
+        rgba(100, 50, 20, 0.9) 0%, 
+        rgba(150, 80, 40, 0.8) 50%, 
+        rgba(70, 30, 10, 0.9) 100%);
+    border-color: rgba(255, 165, 0, 0.8);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 165, 0, 0.6),
+        0 0 60px rgba(255, 165, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.unity-btn[data-level="quiz"] .btn-icon {
+    color: #FFA500;
+}
+
+.unity-btn[data-level="quiz"]:hover .btn-icon {
+    color: #FFD700;
+    text-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+}
+
+/* Experiments Button Special Styling */
+.unity-btn[data-level="experiments"] {
+    background: linear-gradient(145deg, 
+        rgba(10, 50, 25, 0.9) 0%, 
+        rgba(20, 100, 50, 0.8) 50%, 
+        rgba(5, 35, 15, 0.9) 100%);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(0, 255, 127, 0.3);
+}
+
+.unity-btn[data-level="experiments"]:hover {
+    background: linear-gradient(145deg, 
+        rgba(20, 100, 50, 0.9) 0%, 
+        rgba(40, 150, 80, 0.8) 50%, 
+        rgba(10, 70, 30, 0.9) 100%);
+    border-color: rgba(0, 255, 127, 0.8);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 255, 127, 0.6),
+        0 0 60px rgba(0, 255, 127, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.unity-btn[data-level="experiments"] .btn-icon {
+    color: #00FF7F;
+}
+
+.unity-btn[data-level="experiments"]:hover .btn-icon {
+    color: #98FB98;
+    text-shadow: 0 0 20px rgba(0, 255, 127, 0.8);
+}
+
+.unity-btn:hover {
+    background: linear-gradient(145deg, 
+        rgba(20, 50, 100, 0.9) 0%, 
+        rgba(40, 80, 150, 0.8) 50%, 
+        rgba(10, 30, 70, 0.9) 100%);
+    border-color: rgba(0, 191, 255, 0.8);
+    transform: translateX(10px) scale(1.05);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 191, 255, 0.6),
+        0 0 60px rgba(0, 191, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.unity-btn:hover .btn-glow {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.unity-btn:hover .btn-icon {
+    color: #FFD700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    transform: scale(1.1);
+}
+
+.unity-btn:active {
+    transform: translateX(5px) scale(1.02);
+}
+
+/* Button Glow Effect */
+.btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, 
+        rgba(0, 191, 255, 0.2) 0%, 
+        transparent 70%);
+    opacity: 0;
+    transition: all 0.4s ease;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+/* Button Icon */
+.btn-icon {
+    font-size: 2.2rem;
+    color: #00BFFF;
+    text-shadow: 
+        0 0 10px rgba(0, 191, 255, 0.5),
+        0 0 20px rgba(0, 191, 255, 0.3);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+}
+
+/* Button Content */
+.btn-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.btn-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.btn-desc {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #B0C4DE;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    letter-spacing: 0.5px;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: linear-gradient(145deg, 
+        rgba(10, 25, 50, 0.95) 0%, 
+        rgba(20, 40, 80, 0.9) 50%, 
+        rgba(5, 15, 35, 0.95) 100%);
+    border: 2px solid rgba(0, 191, 255, 0.4);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(0, 191, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+}
+
+.modal-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+.close-btn:hover {
+    color: #ff4444;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
+    transform: scale(1.1);
+}
+
+.instruction-item,
+.credit-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 50, 100, 0.2);
+    border-left: 4px solid #00BFFF;
+    border-radius: 8px;
+}
+
+.instruction-item h3,
+.credit-item h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.3rem;
+    color: #00BFFF;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.instruction-item p,
+.credit-item p {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    color: #B0C4DE;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+/* Energy Game Button Special Styling */
+.unity-btn[data-level="energy-game"] {
+    background: linear-gradient(145deg, 
+        rgba(25, 50, 25, 0.9) 0%, 
+        rgba(50, 100, 50, 0.8) 50%, 
+        rgba(15, 35, 15, 0.9) 100%);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(0, 255, 127, 0.3);
+}
+
+.unity-btn[data-level="energy-game"]:hover {
+    background: linear-gradient(145deg, 
+        rgba(50, 100, 50, 0.9) 0%, 
+        rgba(80, 150, 80, 0.8) 50%, 
+        rgba(30, 70, 30, 0.9) 100%);
+    border-color: rgba(0, 255, 127, 0.8);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 255, 127, 0.6),
+        0 0 60px rgba(0, 255, 127, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.unity-btn[data-level="energy-game"] .btn-icon {
+    color: #00FF7F;
+}
+
+.unity-btn[data-level="energy-game"]:hover .btn-icon {
+    color: #32CD32;
+    text-shadow: 0 0 20px rgba(0, 255, 127, 0.8);
+}
+
+/* SimCity Button Special Styling */
+.unity-btn[data-level="simcity"] {
+    background: linear-gradient(145deg, 
+        rgba(30, 30, 60, 0.9) 0%, 
+        rgba(60, 60, 120, 0.8) 50%, 
+        rgba(20, 20, 50, 0.9) 100%);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(100, 149, 237, 0.3);
+}
+
+.unity-btn[data-level="simcity"]:hover {
+    background: linear-gradient(145deg, 
+        rgba(60, 60, 120, 0.9) 0%, 
+        rgba(100, 100, 180, 0.8) 50%, 
+        rgba(40, 40, 90, 0.9) 100%);
+    border-color: rgba(100, 149, 237, 0.8);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(100, 149, 237, 0.6),
+        0 0 60px rgba(100, 149, 237, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.unity-btn[data-level="simcity"] .btn-icon {
+    color: #6495ED;
+}
+
+.unity-btn[data-level="simcity"]:hover .btn-icon {
+    color: #87CEEB;
+    text-shadow: 0 0 20px rgba(100, 149, 237, 0.8);
+}
+
+/* Animations */
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes buttonSlideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes unlockAnimation {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px) scale(0.8);
+        filter: brightness(0.5);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateX(10px) scale(1.1);
+        filter: brightness(1.5);
+        box-shadow: 
+            0 0 30px rgba(0, 255, 127, 0.8),
+            0 0 60px rgba(0, 255, 127, 0.5),
+            0 0 90px rgba(0, 255, 127, 0.3);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        filter: brightness(1);
+        box-shadow: 
+            0 8px 25px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            0 0 0 1px rgba(0, 255, 127, 0.3);
+    }
+}
+
+@keyframes sparkleEffect {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+    }
+}
+
+/* Unlock sparkle effect */
+.unity-btn[data-level="energy-game"]::before {
+    content: '✨';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.5rem;
+    animation: sparkleEffect 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.unity-btn[data-level="energy-game"]::after {
+    content: '🔓';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    font-size: 1.2rem;
+    animation: sparkleEffect 2s ease-in-out infinite 0.5s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .unity-btn {
+        width: 320px;
+        padding: 16px 25px;
+    }
+    
+    .game-title {
+        font-size: 3.5rem;
+    }
+    
+    .level-menu {
+        left: 30px;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 768px) and (orientation: portrait) {
+    .header-container {
+        top: 20px;
+    }
+    
+    .game-title {
+        font-size: 2.2rem;
+        letter-spacing: 2px;
+    }
+    
+    .game-subtitle {
+        font-size: 1rem;
+    }
+    
+    .level-menu {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 45%;
+        gap: 18px;
+        width: 90%;
+        max-width: 320px;
+    }
+    
+    .unity-btn {
+        width: 100%;
+        padding: 18px 20px;
+        gap: 15px;
+        min-height: 60px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .btn-icon {
+        font-size: 1.8rem;
+        width: 50px;
+    }
+    
+    .btn-title {
+        font-size: 1.2rem;
+    }
+    
+    .btn-desc {
+        font-size: 0.9rem;
+    }
+    
+    .top-options {
+        top: 20px;
+        right: 20px;
+        gap: 12px;
+    }
+    
+    .small-btn {
+        padding: 12px 18px;
+        font-size: 0.85rem;
+        min-height: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Mobile Landscape and General Mobile */
+@media (max-width: 768px) {
+    .header-container {
+        top: 20px;
+    }
+    
+    .game-title {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+    }
+    
+    .game-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .level-menu {
+        left: 20px;
+        top: 45%;
+        gap: 15px;
+    }
+    
+    .unity-btn {
+        width: 280px;
+        padding: 14px 20px;
+        gap: 15px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .btn-icon {
+        font-size: 1.8rem;
+        width: 50px;
+    }
+    
+    .btn-title {
+        font-size: 1.2rem;
+    }
+    
+    .btn-desc {
+        font-size: 0.9rem;
+    }
+    
+    .top-options {
+        top: 20px;
+        right: 20px;
+        gap: 10px;
+    }
+    
+    .small-btn {
+        padding: 10px 15px;
+        font-size: 0.8rem;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .game-subtitle {
+        font-size: 1rem;
+    }
+    
+    .level-menu {
+        left: 15px;
+        top: 40%;
+        gap: 12px;
+    }
+    
+    .unity-btn {
+        width: 250px;
+        padding: 12px 18px;
+    }
+    
+    .btn-icon {
+        font-size: 1.6rem;
+        width: 45px;
+    }
+    
+    .btn-title {
+        font-size: 1.1rem;
+    }
+    
+    .btn-desc {
+        font-size: 0.8rem;
+    }
+    
+    .top-options {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .small-btn {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .unity-btn {
+        width: 220px;
+        padding: 10px 15px;
+    }
+    
+    .level-menu {
+        left: 10px;
+    }
+    
+    .header-container {
+        top: 15px;
+    }
+    
+    .main-logo {
+        width: 60px;
+    }
+}

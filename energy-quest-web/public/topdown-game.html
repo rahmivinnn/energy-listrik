@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Top Down Game</title>
+    <link rel="stylesheet" href="topdown-game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="audio-manager.js"></script>
+</head>
+<body>
+    <!-- Game Container -->
+    <div id="game-container">
+        <!-- Game UI -->
+        <div id="game-ui">
+            <div id="score-display">
+                <span class="ui-label">Skor:</span>
+                <span id="score">0</span>
+            </div>
+            <div id="energy-display">
+                <span class="ui-label">Energi:</span>
+                <div id="energy-bar">
+                    <div id="energy-fill"></div>
+                </div>
+                <span id="energy-text">0/100</span>
+            </div>
+            <div id="level-display">
+                <span class="ui-label">Level:</span>
+                <span id="level">1</span>
+            </div>
+            <div id="time-display">
+                <span class="ui-label">Waktu:</span>
+                <span id="time">60</span>
+            </div>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="game-canvas" width="800" height="600"></canvas>
+
+        <!-- Game Messages -->
+        <div id="game-messages">
+            <div id="message" class="message hidden"></div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <div class="screen-content">
+                <h1>ENERGY QUEST</h1>
+                <h2>Level 4: Ruang Bawah Tanah</h2>
+                <p>Kumpulkan energi hijau dan hindari energi boros untuk membuka pintu rahasia!</p>
+                <div class="controls-info">
+                    <h3>Kontrol:</h3>
+                    <p>WASD atau Arrow Keys - Bergerak</p>
+                    <p>Space - Dash (menggunakan energi)</p>
+                    <p>E - Interact</p>
+                </div>
+                <div class="level-info">
+                    <p><strong>Target:</strong> Kumpulkan 50 energi dalam 60 detik</p>
+                    <p><strong>Hadiah:</strong> Kunci Energi 4 - Akses ke Ruang Rahasia</p>
+                </div>
+                <button id="start-btn" class="game-btn">MULAI LEVEL 4</button>
+                <button id="back-to-menu-btn" class="game-btn secondary">KEMBALI KE MENU</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen hidden">
+            <div class="screen-content">
+                <h1>GAME OVER</h1>
+                <div id="final-score">
+                    <p>Skor Akhir: <span id="final-score-value">0</span></p>
+                    <p>Level Tercapai: <span id="final-level">1</span></p>
+                    <p>Energi Dikumpulkan: <span id="final-energy">0</span></p>
+                </div>
+                <button id="restart-btn" class="game-btn">MAIN LAGI</button>
+                <button id="menu-btn" class="game-btn secondary">KEMBALI KE MENU</button>
+            </div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pause-screen" class="screen hidden">
+            <div class="screen-content">
+                <h1>PAUSE</h1>
+                <button id="resume-btn" class="game-btn">LANJUTKAN</button>
+                <button id="pause-menu-btn" class="game-btn secondary">KEMBALI KE MENU</button>
+            </div>
+        </div>
+
+        <!-- Level Complete Screen -->
+        <div id="level-complete-screen" class="screen hidden">
+            <div class="screen-content">
+                <h1>LEVEL 4 SELESAI!</h1>
+                <div class="success-message">
+                    <h2>🔑 Kunci Energi 4 Didapat!</h2>
+                    <p>Akses ke Ruang Rahasia telah terbuka!</p>
+                </div>
+                <div id="level-stats">
+                    <p>Skor Level: <span id="level-score">0</span></p>
+                    <p>Energi Dikumpulkan: <span id="level-energy">0</span></p>
+                    <p>Waktu Tersisa: <span id="time-bonus">0</span>s</p>
+                </div>
+                <button id="next-level-btn" class="game-btn">LANJUT KE RUANG RAHASIA</button>
+                <button id="back-to-main-btn" class="game-btn secondary">KEMBALI KE MENU UTAMA</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="topdown-game.js"></script>
+</body>
+</html>

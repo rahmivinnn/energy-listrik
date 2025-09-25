@@ -1,0 +1,58 @@
+<svg width="80" height="120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Character 1 - Student/Player -->
+  <defs>
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fdbcb4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ea9999;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b4513;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shirtGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4285f4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a73e8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Body -->
+  <ellipse cx="40" cy="90" rx="15" ry="25" fill="url(#shirtGrad)" stroke="#1a73e8" stroke-width="1"/>
+  
+  <!-- Arms -->
+  <ellipse cx="25" cy="75" rx="8" ry="15" fill="url(#shirtGrad)" stroke="#1a73e8" stroke-width="1"/>
+  <ellipse cx="55" cy="75" rx="8" ry="15" fill="url(#shirtGrad)" stroke="#1a73e8" stroke-width="1"/>
+  
+  <!-- Hands -->
+  <circle cx="25" cy="85" r="5" fill="url(#skinGrad)" stroke="#ea9999" stroke-width="1"/>
+  <circle cx="55" cy="85" r="5" fill="url(#skinGrad)" stroke="#ea9999" stroke-width="1"/>
+  
+  <!-- Legs -->
+  <ellipse cx="35" cy="105" rx="6" ry="12" fill="#2c3e50" stroke="#1a252f" stroke-width="1"/>
+  <ellipse cx="45" cy="105" rx="6" ry="12" fill="#2c3e50" stroke="#1a252f" stroke-width="1"/>
+  
+  <!-- Feet -->
+  <ellipse cx="35" cy="115" rx="8" ry="4" fill="#8b4513" stroke="#654321" stroke-width="1"/>
+  <ellipse cx="45" cy="115" rx="8" ry="4" fill="#8b4513" stroke="#654321" stroke-width="1"/>
+  
+  <!-- Head -->
+  <circle cx="40" cy="35" r="18" fill="url(#skinGrad)" stroke="#ea9999" stroke-width="1"/>
+  
+  <!-- Hair -->
+  <path d="M 25 25 Q 40 15 55 25 Q 55 35 50 40 Q 40 35 30 40 Q 25 35 25 25" fill="url(#hairGrad)" stroke="#654321" stroke-width="1"/>
+  
+  <!-- Eyes -->
+  <circle cx="35" cy="32" r="2" fill="#000"/>
+  <circle cx="45" cy="32" r="2" fill="#000"/>
+  <circle cx="35" cy="31" r="1" fill="#fff"/>
+  <circle cx="45" cy="31" r="1" fill="#fff"/>
+  
+  <!-- Nose -->
+  <ellipse cx="40" cy="36" rx="1" ry="2" fill="#ea9999"/>
+  
+  <!-- Mouth -->
+  <path d="M 37 40 Q 40 42 43 40" stroke="#000" stroke-width="1" fill="none"/>
+  
+  <!-- Energy symbol on shirt -->
+  <circle cx="40" cy="80" r="6" fill="#ffeb3b" stroke="#ffc107" stroke-width="1"/>
+  <text x="40" y="84" text-anchor="middle" font-family="Arial" font-size="8" fill="#000">⚡</text>
+</svg>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest: Kuis Hemat Listrik</title>
+    <link rel="stylesheet" href="public/quiz-styles.css">
+</head>
+<body>
+    <div id="quiz-container" class="quiz-container">
+        <!-- Background -->
+        <div class="quiz-background"></div>
+        <div class="background-layer"></div>
+        <div class="background-overlay"></div>
+        
+        <!-- Quiz Header -->
+        <div class="quiz-header">
+            <h1 class="quiz-title">Energy Quest: Misteri Hemat Listrik</h1>
+            <h2 class="quiz-subtitle">Kuis Pengetahuan Energi</h2>
+            <div class="quiz-progress">
+                <span id="question-counter">Soal 1 dari 20</span>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Content -->
+        <div class="quiz-content">
+            <div id="question-container" class="question-container">
+                <div id="question-text" class="question-text"></div>
+                <div id="options-container" class="options-container">
+                    <!-- Options will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Quiz Controls -->
+            <div class="quiz-controls">
+                <button id="prev-btn" class="quiz-btn secondary" disabled>Sebelumnya</button>
+                <button id="next-btn" class="quiz-btn primary" disabled>Selanjutnya</button>
+                <button id="submit-btn" class="quiz-btn success" style="display: none;">Selesai</button>
+            </div>
+        </div>
+
+        <!-- Quiz Results -->
+        <div id="quiz-results" class="quiz-results" style="display: none;">
+            <div class="results-container">
+                <h2 class="results-title">Hasil Kuis</h2>
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span id="final-score">0</span>
+                        <span class="score-total">/20</span>
+                    </div>
+                    <div class="score-percentage" id="score-percentage">0%</div>
+                </div>
+                <div class="score-message" id="score-message"></div>
+                <div class="results-actions">
+                    <button id="retry-btn" class="quiz-btn primary">Ulangi Kuis</button>
+                    <button id="back-menu-btn" class="quiz-btn secondary">Kembali ke Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation-controls">
+            <button id="back-to-menu" class="nav-btn">
+                <span class="nav-icon">←</span>
+                <span class="nav-text">Kembali ke Menu</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="quiz-bg-music" loop>
+        <source src="public/audio/background_music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="correct-sound">
+        <source src="public/audio/sfx_ding.wav" type="audio/wav">
+    </audio>
+    <audio id="wrong-sound">
+        <source src="public/audio/sfx_buzz.wav" type="audio/wav">
+    </audio>
+    <audio id="complete-sound">
+        <source src="public/audio/dramatic_sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <script type="module" src="scripts/quiz.js"></script>
+</body>
+</html>

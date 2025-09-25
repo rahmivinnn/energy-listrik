@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Quest - Game 2D</title>
+    <link rel="stylesheet" href="game-2d.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="audio-manager.js"></script>
+</head>
+<body>
+    <!-- Game Container -->
+    <div id="game-container">
+        <!-- Opening Scene -->
+        <div id="opening-scene" class="scene active">
+            <div class="scene-content">
+                <h1>Energy Quest</h1>
+                <p>Petualangan Hemat Energi</p>
+                <button id="start-game-btn" class="btn-primary">Mulai Petualangan</button>
+            </div>
+        </div>
+
+        <!-- Level 1: Ruang Tamu -->
+        <div id="level1" class="scene">
+            <div class="level-header">
+                <h2>Level 1: Ruang Tamu - Dasar Listrik</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 25%"></div>
+                </div>
+            </div>
+            
+            <!-- Puzzle 1: Rangkaian Kabel -->
+            <div id="puzzle1" class="puzzle-container active">
+                <h3>Puzzle 1: Rangkaian Kabel</h3>
+                <p class="instruction">Sambungkan kabel untuk membuat rangkaian tertutup</p>
+                
+                <div class="circuit-board">
+                    <div class="component battery" id="battery">
+                        <div class="terminal positive" data-terminal="positive">+</div>
+                        <div class="terminal negative" data-terminal="negative">-</div>
+                    </div>
+                    
+                    <div class="component switch" id="switch" data-state="off">
+                        <div class="terminal left" data-terminal="switch-left"></div>
+                        <div class="terminal right" data-terminal="switch-right"></div>
+                    </div>
+                    
+                    <div class="component bulb" id="bulb">
+                        <div class="terminal left" data-terminal="bulb-left"></div>
+                        <div class="terminal right" data-terminal="bulb-right"></div>
+                    </div>
+                </div>
+                
+                <div class="cables-container">
+                    <div class="cable" id="cable1" draggable="true"></div>
+                    <div class="cable" id="cable2" draggable="true"></div>
+                    <div class="cable" id="cable3" draggable="true"></div>
+                </div>
+                
+                <div class="feedback" id="puzzle1-feedback"></div>
+                <button id="check-circuit-btn" class="btn-secondary">Periksa Rangkaian</button>
+            </div>
+            
+            <!-- Puzzle 2: TV Tua -->
+            <div id="puzzle2" class="puzzle-container">
+                <h3>Puzzle 2: TV Tua</h3>
+                <p class="instruction">Nyalakan TV dengan urutan yang benar</p>
+                
+                <div class="tv-setup">
+                    <div class="tv" id="tv">
+                        <div class="screen" id="tv-screen">TV Mati</div>
+                        <div class="controls">
+                            <button id="power-btn" class="tv-btn" disabled>Power</button>
+                            <button id="channel-btn" class="tv-btn" disabled>Channel</button>
+                        </div>
+                    </div>
+                    
+                    <div class="power-outlet" id="outlet">
+                        <div class="socket"></div>
+                    </div>
+                    
+                    <div class="power-cable" id="power-cable" draggable="true"></div>
+                    <div class="wall-switch" id="wall-switch" data-state="off">OFF</div>
+                </div>
+                
+                <div class="feedback" id="puzzle2-feedback"></div>
+                <div class="step-indicator">
+                    <span class="step" id="step1">1. Colok Kabel</span>
+                    <span class="step" id="step2">2. Nyalakan Saklar</span>
+                    <span class="step" id="step3">3. Tekan Power</span>
+                    <span class="step" id="step4">4. Atur Channel</span>
+                </div>
+            </div>
+            
+            <div class="level-reward" id="level1-reward">
+                <div class="key-energy">🔑 Kunci Energi 1</div>
+                <button id="next-level1-btn" class="btn-primary">Lanjut ke Dapur</button>
+            </div>
+        </div>
+
+        <!-- Level 2: Dapur -->
+        <div id="level2" class="scene">
+            <div class="level-header">
+                <h2>Level 2: Dapur - Efisiensi Energi</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%"></div>
+                </div>
+            </div>
+            
+            <div class="power-meter">
+                <h3>Power Meter</h3>
+                <div class="meter-bar">
+                    <div class="meter-fill" id="power-fill"></div>
+                </div>
+                <span class="meter-label" id="power-status">Efisien</span>
+            </div>
+            
+            <div class="kitchen-appliances">
+                <div class="appliance" id="window">
+                    <h4>Jendela</h4>
+                    <button class="appliance-btn" data-appliance="window" data-state="closed">Buka Jendela</button>
+                </div>
+                
+                <div class="appliance" id="lights">
+                    <h4>Lampu</h4>
+                    <button class="appliance-btn" data-appliance="lights" data-state="on">Matikan Lampu</button>
+                </div>
+                
+                <div class="appliance" id="fridge">
+                    <h4>Kulkas</h4>
+                    <button class="appliance-btn" data-appliance="fridge" data-state="closed">Buka Kulkas</button>
+                    <div class="timer" id="fridge-timer"></div>
+                </div>
+                
+                <div class="appliance" id="rice-cooker">
+                    <h4>Rice Cooker</h4>
+                    <select class="appliance-select" data-appliance="rice-cooker">
+                        <option value="normal">Mode Normal</option>
+                        <option value="eco">Mode Hemat</option>
+                    </select>
+                </div>
+                
+                <div class="appliance" id="iron">
+                    <h4>Setrika</h4>
+                    <button class="appliance-btn" data-appliance="iron" data-state="off">Nyalakan Setrika</button>
+                    <div class="timer" id="iron-timer"></div>
+                </div>
+            </div>
+            
+            <div class="feedback" id="level2-feedback"></div>
+            
+            <div class="level-reward" id="level2-reward">
+                <div class="key-energy">🔑 Kunci Energi 2</div>
+                <button id="next-level2-btn" class="btn-primary">Lanjut ke Laboratorium</button>
+            </div>
+        </div>
+
+        <!-- Level 3: Laboratorium -->
+        <div id="level3" class="scene">
+            <div class="level-header">
+                <h2>Level 3: Laboratorium - Simulasi Tagihan</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+            
+            <div class="lab-container">
+                <div class="appliance-list">
+                    <h3>Peralatan Rumah Tangga</h3>
+                    
+                    <div class="lab-appliance" data-appliance="ac">
+                        <span class="appliance-name">AC (1500W)</span>
+                        <label class="switch">
+                            <input type="checkbox" class="appliance-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="usage-time">0 jam</span>
+                    </div>
+                    
+                    <div class="lab-appliance" data-appliance="lamp">
+                        <span class="appliance-name">Lampu (60W)</span>
+                        <label class="switch">
+                            <input type="checkbox" class="appliance-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="usage-time">0 jam</span>
+                    </div>
+                    
+                    <div class="lab-appliance" data-appliance="fan">
+                        <span class="appliance-name">Kipas (75W)</span>
+                        <label class="switch">
+                            <input type="checkbox" class="appliance-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="usage-time">0 jam</span>
+                    </div>
+                    
+                    <div class="lab-appliance" data-appliance="tv">
+                        <span class="appliance-name">TV (200W)</span>
+                        <label class="switch">
+                            <input type="checkbox" class="appliance-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="usage-time">0 jam</span>
+                    </div>
+                    
+                    <div class="lab-appliance" data-appliance="refrigerator">
+                        <span class="appliance-name">Kulkas (150W)</span>
+                        <label class="switch">
+                            <input type="checkbox" class="appliance-toggle" checked disabled>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="usage-time">24 jam</span>
+                    </div>
+                </div>
+                
+                <div class="calculation-panel">
+                    <h3>Perhitungan Energi</h3>
+                    <div class="calc-row">
+                        <span>Total Konsumsi:</span>
+                        <span id="total-consumption">0 kWh</span>
+                    </div>
+                    <div class="calc-row">
+                        <span>Estimasi Tagihan:</span>
+                        <span id="estimated-bill">Rp 0</span>
+                    </div>
+                    <div class="calc-row target">
+                        <span>Target: ≤ Rp 300.000</span>
+                    </div>
+                </div>
+                
+                <div class="lab-status" id="lab-status">Atur peralatan untuk mencapai target</div>
+            </div>
+            
+            <div class="level-reward" id="level3-reward">
+                <div class="key-energy">🔑 Kunci Energi 3</div>
+                <button id="next-level3-btn" class="btn-primary">Lanjut ke Ruang Bawah Tanah</button>
+            </div>
+        </div>
+
+        <!-- Level 4: Ruang Bawah Tanah -->
+        <div id="level4" class="scene">
+            <div class="level-header">
+                <h2>Level 4: Ruang Bawah Tanah - Kuis Evaluasi</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="quiz-intro">
+                <h3>🧠 Uji Pengetahuan Anda!</h3>
+                <p>Jawab 10 pertanyaan tentang efisiensi energi untuk menyelesaikan Energy Quest.</p>
+                <button id="start-quiz" class="btn-primary">Mulai Kuis</button>
+            </div>
+            
+            <div class="quiz-content" style="display: none;">
+                <div class="quiz-container">
+                    <div class="quiz-header">
+                        <div id="question-number">Soal 1 dari 10</div>
+                        <div class="timer" id="quiz-timer">15</div>
+                    </div>
+                    
+                    <div class="question-container">
+                        <h3 id="question-text">Pertanyaan akan muncul di sini</h3>
+                        
+                        <div class="answers-container">
+                            <!-- Answers will be dynamically generated -->
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-feedback" id="quiz-feedback" style="display: none;"></div>
+                    
+                    <div class="quiz-controls">
+                        <button id="next-question" class="btn-primary" style="display: none;">Soal Berikutnya</button>
+                    </div>
+                    
+                    <div class="quiz-score" id="quiz-score">
+                        Skor: 0/10
+                    </div>
+                </div>
+            </div>
+            
+            <div class="level-reward" id="level4-reward">
+                <div class="key-energy">🔑</div>
+                <div class="final-message">Selamat! Anda telah menyelesaikan Energy Quest!</div>
+                <div class="reward-text">Anda telah menjadi ahli efisiensi energi!</div>
+                <button id="finish-game-btn" class="btn-primary">Selesai</button>
+            </div>
+        </div>
+
+        <!-- Ending Scene -->
+        <div id="ending-scene" class="scene">
+            <div class="scene-content">
+                <h1>Selamat!</h1>
+                <p>Anda telah menyelesaikan Energy Quest dan menjadi ahli hemat energi!</p>
+                <div class="final-score" id="final-game-score"></div>
+                <button id="restart-game-btn" class="btn-primary">Main Lagi</button>
+                <button id="back-to-menu-btn" class="btn-secondary">Kembali ke Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="success-sound" preload="auto">
+        <source src="sounds/success.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="error-sound" preload="auto">
+        <source src="sounds/error.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="click-sound" preload="auto">
+        <source src="sounds/click.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="game-2d.js"></script>
+</body>
+</html>
